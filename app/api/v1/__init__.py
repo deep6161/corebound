@@ -1,0 +1,1 @@
+from app.api.v1.subjects import router as subjects_router

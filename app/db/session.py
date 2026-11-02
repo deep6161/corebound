@@ -1,15 +1,12 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from collections.abc import Generator
 
-from app.core.settings import settings
+from app.db.database import SessionLocal
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    echo=settings.DEBUG,
-)
 
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine,
-)
+def get_db() -> Generator:
+    db = SessionLocal()
+
+    try:
+        yield db
+    finally:
+        db.close()
