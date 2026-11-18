@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Refined Plasma Test</title>
+<style>
+  body {
+    margin: 0;
+    background: #070314;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  svg {
+    width: 1100px;
+    height: 300px;
+  }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1100 300">
+  <defs>
+    <!-- Soft Ethereal Smoke Glow Filter -->
+    <filter id="plasmaSmokeFine" x="-30%" y="-100%" width="160%" height="300%">
+      <feGaussianBlur stdDeviation="7" result="smokeBlur" />
+    </filter>
+
+    <!-- Electric Lightning Discharge Filter -->
+    <filter id="electricArcFine" x="-25%" y="-100%" width="150%" height="300%">
+      <feTurbulence type="turbulence" baseFrequency="0.05 0.15" numOctaves="3" result="noise" seed="4">
+        <animate attributeName="seed" values="1;7;14;25;38;52;68;1" dur="0.4s" repeatCount="indefinite" />
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" result="jagged" />
+      <feGaussianBlur in="jagged" stdDeviation="1.2" result="glow" />
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="jagged" />
+      </feMerge>
+    </filter>
+
+    <!-- Core Bloom -->
+    <filter id="coreBloomFine" x="-20%" y="-50%" width="140%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="b1" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b2" />
+      <feMerge>
+        <feMergeNode in="b2" />
+        <feMergeNode in="b1" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <linearGradient id="purplePlasmaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#9333ea" stop-opacity="0.6" />
+      <stop offset="30%" stop-color="#c084fc" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#a855f7" stop-opacity="0.75" />
+      <stop offset="80%" stop-color="#c084fc" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#9333ea" stop-opacity="0.6" />
+    </linearGradient>
+
+    <linearGradient id="darkSmokeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4c1d95" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="#6b21a8" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#4c1d95" stop-opacity="0.35" />
+    </linearGradient>
+  </defs>
+
+  <!-- Layer 1: Ethereal Dark Purple Smoke Aura (Transparent, moody) -->
+  <path d="M 50 150 Q 550 150 1050 150" stroke="url(#darkSmokeGrad)" stroke-width="22" fill="none" filter="url(#plasmaSmokeFine)" />
+
+  <!-- Layer 2: Radiant Electric Violet Corona -->
+  <path d="M 50 150 Q 550 150 1050 150" stroke="url(#purplePlasmaGrad)" stroke-width="8" fill="none" filter="url(#plasmaSmokeFine)" />
+
+  <!-- Layer 3: Crackling Electric Discharge (Fine, energetic arcs hugging the beam) -->
+  <path d="M 50 150 Q 550 150 1050 150" stroke="#d946ef" stroke-width="2.2" fill="none" filter="url(#electricArcFine)" />
+  <path d="M 50 150 Q 550 150 1050 150" stroke="#f5d0fe" stroke-width="1.6" fill="none" filter="url(#electricArcFine)" />
+
+  <!-- Layer 4: Razor-Sharp White Hot Laser Core -->
+  <path d="M 50 150 Q 550 150 1050 150" stroke="#ffffff" stroke-width="2.2" fill="none" filter="url(#coreBloomFine)" />
+
+  <!-- Layer 5: High-Speed Electric Packets -->
+  <path d="M 50 150 Q 550 150 1050 150" stroke="#ffffff" stroke-width="2.0" fill="none" stroke-dasharray="12 80" />
+</svg>
+</body>
+</html>

@@ -1,0 +1,5937 @@
+/* ==========================================================================
+   COREBOUND — Premium AAA World Map UI
+   Unified Design System · Zero-Overlap · Consistent Typography
+   ========================================================================== */
+
+/* ── RESET ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ── TOKENS ── */
+:root {
+    --space: #0b1536;
+    --glass: rgba(14, 24, 58, 0.76);
+    --glass-border: rgba(147, 197, 253, 0.35);
+    --glass-hover: rgba(0, 229, 255, 0.45);
+    --radius: 10px;
+    --radius-sm: 7px;
+    --radius-pill: 999px;
+
+    /* ── AAA SCI-FI CELESTIAL COLOR SYSTEM ── */
+    --cyan: #00e5ff;
+    /* Primary Corebound Interaction Color */
+    --cyan-dim: #38bdf8;
+    /* Electric Cyan Secondary Accent */
+    --cyan-glow: rgba(0, 229, 255, 0.40);
+    --violet: #8b5cf6;
+    /* Mystical Secondary Color */
+    --violet-light: #c084fc;
+    /* Soft Violet Highlight */
+    --purple: #7c3aed;
+    /* Deep Cosmic Violet */
+    --violet-glow: rgba(139, 92, 246, 0.32);
+    --gold: #f5b942;
+    /* Warm Gold: Rewards, Achievements */
+    --gold-dim: #d97706;
+    /* Controlled Amber/Gold */
+    --gold-glow: rgba(245, 185, 66, 0.35);
+    --orange: #ff7a18;
+    /* High-energy / Algorithm Forge */
+    --orange-glow: rgba(255, 122, 24, 0.35);
+    --emerald: #10b981;
+    /* Refined Emerald/Teal: Database */
+    --emerald-glow: rgba(16, 185, 129, 0.35);
+    --red: #ff4d5e;
+    /* Danger, Energy, Alerts only */
+    --red-glow: rgba(255, 77, 94, 0.40);
+
+    /* ── REFINED TYPOGRAPHY COLORS ── */
+    --text-primary: #f8fafc;
+    /* Primary Crisp White */
+    --text-secondary: #cbd5e1;
+    /* Muted Slate */
+    --text-muted: rgba(203, 213, 225, 0.75);
+
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-tech: 'Cinzel', Georgia, serif;
+    --font-heading: 'Cinzel', Georgia, serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--space);
+    font-family: var(--font-body);
+    color: var(--text-primary);
+}
+
+/* ── VIEWPORT ── */
+.game-viewport {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ── Premium Cyber-Celestial Optical Boot Flare ── */
+.game-viewport::before {
+    content: '';
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 860px;
+    height: 220px;
+    background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.45) 0%, rgba(139, 92, 246, 0.22) 40%, transparent 72%);
+    filter: blur(28px);
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0;
+}
+
+.game-viewport.stage-revealed::before {
+    animation: aetherBootFlare 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes aetherBootFlare {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scaleX(0.2) scaleY(0.4);
+    }
+    35% {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scaleX(1.3) scaleY(1.0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scaleX(2.0) scaleY(0.2);
+        visibility: hidden;
+    }
+}
+
+/* ── Nova Cyber Typewriter Caret ── */
+.typewriter-cursor {
+    display: inline-block;
+    color: #38bdf8;
+    font-weight: 700;
+    margin-left: 2px;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.8);
+    animation: typewriterCaretBlink 0.65s infinite alternate;
+}
+
+@keyframes typewriterCaretBlink {
+    0% {
+        opacity: 0.1;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ── BACKGROUND (Celestial Cloudscape Foundation) ── */
+.cosmos-background {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: url('assets/images/islands/map_bg.png') center/cover no-repeat var(--space);
+    pointer-events: none;
+    animation: bgPowerOn 1.0s cubic-bezier(.16, 1, .3, 1) 0.0s both;
+    will-change: transform, opacity, filter;
+}
+
+@keyframes bgPowerOn {
+    0% {
+        opacity: 0.35;
+        filter: brightness(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        filter: brightness(1.0);
+    }
+}
+
+.nebula-layer {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    opacity: 0.45;
+}
+
+.nebula-1 {
+    background: radial-gradient(circle at 25% 30%, rgba(139, 92, 246, .20) 0%, transparent 60%), radial-gradient(circle at 80% 25%, rgba(124, 58, 237, .15) 0%, transparent 55%);
+    filter: blur(24px);
+    animation: nebulaFadeIn 1.2s ease-out 0.1s both;
+}
+
+.nebula-2 {
+    background: radial-gradient(circle at 50% 50%, rgba(0, 229, 255, .15) 0%, transparent 65%), radial-gradient(circle at 75% 75%, rgba(99, 102, 241, .16) 0%, transparent 60%);
+    filter: blur(28px);
+    animation: nebulaFadeIn 1.2s ease-out 0.15s both;
+}
+
+.nebula-3 {
+    background: radial-gradient(circle at 48% 45%, rgba(56, 189, 248, .12) 0%, transparent 50%), radial-gradient(circle at 30% 75%, rgba(109, 40, 217, .12) 0%, transparent 55%);
+    filter: blur(32px);
+    animation: nebulaFadeIn 1.2s ease-out 0.2s both;
+}
+
+/* ══════════════════════════════════════════════════
+   CELESTIAL SOLAR WIND & AURORA CURTAIN (CINEMATIC)
+   ══════════════════════════════════════════════════ */
+.solar-aurora-curtain {
+    position: absolute;
+    top: -25%;
+    left: -50%;
+    width: 200%;
+    height: 150%;
+    pointer-events: none;
+    z-index: 2;
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+}
+
+.aurora-wave-primary {
+    background: linear-gradient(112deg,
+            transparent 0%,
+            rgba(139, 92, 246, 0.0) 18%,
+            rgba(0, 229, 255, 0.07) 28%,
+            rgba(56, 189, 248, 0.15) 36%,
+            rgba(168, 85, 247, 0.18) 44%,
+            rgba(192, 132, 252, 0.10) 52%,
+            rgba(0, 229, 255, 0.0) 62%,
+            transparent 100%);
+    filter: blur(36px);
+    opacity: 0;
+    animation: auroraWaveSweep1 22s cubic-bezier(0.2, 0.9, 0.3, 1) infinite;
+}
+
+.aurora-wave-secondary {
+    background: linear-gradient(125deg,
+            transparent 0%,
+            rgba(0, 229, 255, 0.0) 22%,
+            rgba(139, 92, 246, 0.13) 34%,
+            rgba(236, 72, 153, 0.09) 42%,
+            rgba(56, 189, 248, 0.13) 48%,
+            rgba(168, 85, 247, 0.0) 58%,
+            transparent 100%);
+    filter: blur(40px);
+    opacity: 0;
+    animation: auroraWaveSweep2 26s cubic-bezier(0.2, 0.9, 0.3, 1) 9s infinite;
+}
+
+@keyframes auroraWaveSweep1 {
+    0% {
+        opacity: 0;
+        transform: translate3d(-40%, -4%, 0) skewX(-14deg) scaleY(0.92);
+    }
+
+    18% {
+        opacity: 0.78;
+    }
+
+    45% {
+        opacity: 0.88;
+        transform: translate3d(8%, 3%, 0) skewX(-11deg) scaleY(1.06);
+    }
+
+    70% {
+        opacity: 0.42;
+    }
+
+    88%,
+    100% {
+        opacity: 0;
+        transform: translate3d(55%, 6%, 0) skewX(-8deg) scaleY(0.95);
+    }
+}
+
+@keyframes auroraWaveSweep2 {
+    0% {
+        opacity: 0;
+        transform: translate3d(-45%, 5%, 0) skewX(-16deg) scaleY(0.95);
+    }
+
+    20% {
+        opacity: 0.68;
+    }
+
+    48% {
+        opacity: 0.82;
+        transform: translate3d(12%, -2%, 0) skewX(-13deg) scaleY(1.08);
+    }
+
+    72% {
+        opacity: 0.38;
+    }
+
+    90%,
+    100% {
+        opacity: 0;
+        transform: translate3d(60%, -5%, 0) skewX(-10deg) scaleY(0.94);
+    }
+}
+
+@keyframes nebulaFadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: .35;
+    }
+}
+
+@keyframes nebulaBreath1 {
+    0% {
+        opacity: .22;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+
+    50% {
+        opacity: .38;
+        transform: translate(14px, -10px) scale(1.04) rotate(0.8deg);
+    }
+
+    100% {
+        opacity: .25;
+        transform: translate(-8px, 6px) scale(1.02) rotate(-0.4deg);
+    }
+}
+
+@keyframes nebulaBreath2 {
+    0% {
+        opacity: .24;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+
+    50% {
+        opacity: .36;
+        transform: translate(-12px, 12px) scale(1.05) rotate(-0.8deg);
+    }
+
+    100% {
+        opacity: .20;
+        transform: translate(10px, -8px) scale(1.02) rotate(0.6deg);
+    }
+}
+
+@keyframes nebulaBreath3 {
+    0% {
+        opacity: .18;
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        opacity: .32;
+        transform: translate(8px, 10px) scale(1.03);
+    }
+
+    100% {
+        opacity: .19;
+        transform: translate(-10px, -6px) scale(1.01);
+    }
+}
+
+.stars-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    animation: starsEntrance 1.2s ease-out 0.15s both;
+}
+
+@keyframes starsEntrance {
+    0% {
+        opacity: 0.25;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.cosmic-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(147, 197, 253, 0.12) 100%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════
+   TOP HUD
+   ══════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════
+   TOP HUD — AAA CYBER-FANTASY MODULAR FLOATING BAR
+   ══════════════════════════════════════════════════ */
+.top-hud {
+    position: absolute;
+    top: 18px;
+    left: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-24px);
+}
+
+.game-viewport.stage-revealed .top-hud {
+    animation: hudSlideDown 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+}
+
+@keyframes hudSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-24px);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+    }
+}
+
+@keyframes hudItemPop {
+    0% {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.96);
+        filter: blur(4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Common Island/Capsule Base */
+.hud-brand {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 52px;
+    position: relative;
+    padding: 0 18px 0 14px;
+    background: linear-gradient(135deg, rgba(14, 24, 60, 0.88) 0%, rgba(18, 32, 75, 0.82) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(56, 189, 248, 0.38);
+    clip-path: polygon(10px 0,
+            calc(100% - 10px) 0,
+            100% 10px,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            10px 100%,
+            0 calc(100% - 10px),
+            0 10px);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35), inset 0 0 15px rgba(56, 189, 248, 0.12);
+    transition: all 0.3s cubic-bezier(.16, 1, .3, 1);
+    animation: hudItemPop 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.10s both;
+}
+
+.hud-brand:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, 0.75);
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.45), 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+.brand-crest-box {
+    position: relative;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: transparent;
+    border: none;
+    clip-path: none;
+    box-shadow: none;
+}
+
+.brand-crest-img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+    transition: transform 0.3s cubic-bezier(.16, 1, .3, 1);
+}
+
+.hud-brand:hover .brand-crest-img {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.95));
+}
+
+.brand-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.brand-title {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1;
+    color: #f1f5f9;
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+}
+
+.brand-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #38bdf8;
+    line-height: 1;
+    text-transform: uppercase;
+    text-shadow: 0 0 6px rgba(56, 189, 248, 0.4);
+}
+
+/* Right Side Wrapper */
+.hud-right-group {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ══════════════════════════════════════════════════
+   1. INDEPENDENT CURRENCY CARD (45° Chamfered Cyber Cuts)
+   ══════════════════════════════════════════════════ */
+.hud-currency-card,
+.hud-currency-group {
+    display: inline-flex;
+    align-items: center;
+    height: 52px;
+    padding: 0 22px;
+    background: linear-gradient(135deg, rgba(14, 24, 60, 0.90) 0%, rgba(18, 32, 75, 0.84) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(56, 189, 248, 0.38);
+    clip-path: polygon(10px 0,
+            calc(100% - 10px) 0,
+            100% 10px,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            10px 100%,
+            0 calc(100% - 10px),
+            0 10px);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35), inset 0 0 15px rgba(56, 189, 248, 0.10);
+    transition: all 0.25s ease;
+    animation: hudItemPop 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+.hud-currency-card:hover,
+.hud-currency-group:hover {
+    border-color: rgba(56, 189, 248, 0.70);
+    background: linear-gradient(135deg, rgba(16, 28, 70, 0.95) 0%, rgba(22, 38, 88, 0.90) 100%);
+    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.45), 0 0 18px rgba(56, 189, 248, 0.25);
+    transform: translateY(-1px);
+}
+
+.curr-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: default;
+    transition: transform 0.2s ease;
+}
+
+.curr-pill:hover {
+    transform: translateY(-1px);
+}
+
+/* Purple Hexagonal XP Badge */
+.xp-hex-badge {
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.7);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.curr-pill:hover .xp-hex-badge {
+    transform: scale(1.1);
+    box-shadow: 0 0 14px rgba(168, 85, 247, 0.9);
+}
+
+.xp-hex-badge span {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+/* Shared Currency Values */
+.curr-val {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.curr-val.xp-val {
+    color: #d8b4fe;
+    text-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
+
+.curr-val.coin-val {
+    color: #fef08a;
+    text-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+}
+
+.curr-val.shard-val {
+    color: #38bdf8;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.55);
+}
+
+.curr-val.heart-val {
+    color: #f87171;
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.55);
+}
+
+/* Delicate Hairline Divider */
+.curr-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.16);
+    margin: 0 13px;
+    flex-shrink: 0;
+}
+
+/* Currency Icons */
+.curr-icon.coin-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.5));
+    transition: transform 0.2s ease;
+}
+
+.curr-pill:hover .coin-icon {
+    transform: scale(1.1);
+}
+
+.curr-icon.diamond-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.55));
+    transition: transform 0.2s ease;
+}
+
+.curr-pill:hover .diamond-icon {
+    transform: scale(1.1);
+}
+
+.curr-icon.heart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.curr-icon.heart-icon svg {
+    animation: heartThrob 2.4s ease-in-out infinite;
+}
+
+/* Refill Energy Plus Button */
+.curr-plus-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #f87171;
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: 6px;
+    transition: all 0.2s ease;
+    outline: none;
+    line-height: 1;
+    padding: 0;
+}
+
+.curr-plus-btn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    transform: scale(1.12);
+}
+
+/* ══════════════════════════════════════════════════
+   2. INDEPENDENT GUARDIAN PROFILE CARD (45° Chamfered Cyber Cuts)
+   ══════════════════════════════════════════════════ */
+.hud-profile-card,
+.hud-profile-capsule {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    height: 56px;
+    padding: 0 22px 0 8px;
+    cursor: pointer;
+    user-select: none;
+    overflow: visible;
+    animation: hudItemPop 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+
+/* 45° Chamfered Cyber Card Background (Allows Children to Break Out) */
+.hud-profile-card::before,
+.hud-profile-capsule::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(14, 24, 60, 0.92) 0%, rgba(22, 36, 85, 0.88) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    clip-path: polygon(12px 0,
+            calc(100% - 12px) 0,
+            100% 12px,
+            100% calc(100% - 12px),
+            calc(100% - 12px) 100%,
+            12px 100%,
+            0 calc(100% - 12px),
+            0 12px);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35), inset 0 0 15px rgba(168, 85, 247, 0.12);
+    z-index: 0;
+    transition: all 0.25s ease;
+}
+
+.hud-profile-card:hover::before,
+.hud-profile-capsule:hover::before {
+    border-color: rgba(192, 132, 252, 0.80);
+    background: linear-gradient(135deg, rgba(18, 30, 72, 0.96) 0%, rgba(26, 42, 98, 0.92) 100%);
+    box-shadow: 0 14px 36px rgba(15, 23, 42, 0.45), 0 0 20px rgba(168, 85, 247, 0.35);
+}
+
+/* Popout Avatar Circle Frame */
+.profile-avatar-frame,
+.profile-avatar-crest {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: visible;
+    z-index: 5;
+}
+
+/* Static Sleek Glowing Circular Portal Base */
+.avatar-circle-base,
+.avatar-disc {
+    position: absolute;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 30%, rgba(147, 51, 234, 0.45) 0%, #0d122b 75%);
+    border: 2px solid rgba(168, 85, 247, 0.75);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.45), inset 0 0 10px rgba(0, 0, 0, 0.85);
+    z-index: 1;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Guardian Avatar Character (Pops Up and Out Beyond the Entire Card) */
+.profile-avatar-img {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 8%;
+    z-index: 10;
+    transform-origin: center bottom;
+    transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.32s ease, border-radius 0.38s ease;
+    display: block;
+    pointer-events: none;
+}
+
+/* ── Hover Effect: Guardian Pops Completely Out Beyond the Card Top ── */
+.hud-profile-card:hover .avatar-circle-base,
+.hud-profile-capsule:hover .avatar-circle-base,
+.hud-profile-card:hover .avatar-disc,
+.hud-profile-capsule:hover .avatar-disc {
+    border-color: #38bdf8;
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.75), 0 0 28px rgba(168, 85, 247, 0.50);
+}
+
+.hud-profile-card:hover .profile-avatar-img,
+.hud-profile-capsule:hover .profile-avatar-img {
+    transform: translateY(-12px) scale(1.16);
+    border-radius: 50% 50% 23px 23px;
+    filter: brightness(1.14) contrast(1.06) drop-shadow(0 -4px 10px rgba(56, 189, 248, 0.85)) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.9));
+    z-index: 25;
+}
+
+/* Profile Text Details */
+.profile-details {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 135px;
+}
+
+.profile-role {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #f8fafc;
+    line-height: 1.15;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(192, 132, 252, 0.4), 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.profile-level {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #38bdf8;
+    line-height: 1.15;
+    margin-top: 2px;
+    white-space: nowrap;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+/* Progress Track & Fill */
+.profile-progress-track {
+    width: 135px;
+    height: 5px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 3px;
+    margin-top: 3px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.profile-progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #38bdf8 0%, #c084fc 50%, #38bdf8 100%);
+    background-size: 200% 100%;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+    transition: width 0.4s ease;
+    animation: energyShimmer 3s linear infinite;
+}
+
+@keyframes energyShimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+/* Viewfinder Bracket [A] Action Button (Matches Far-Right Icon) */
+.profile-action-btn {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    margin-left: 12px;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.profile-action-btn:hover {
+    color: #38bdf8;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6));
+}
+
+/* --- Responsive Adaptations --- */
+@media (max-width: 1024px) {
+    .t-label {
+        display: none;
+    }
+
+    .hud-brand-island {
+        padding: 6px 12px;
+    }
+
+    .hud-treasury-capsule {
+        padding: 6px 12px;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-hud {
+        top: 10px;
+        left: 12px;
+        right: 12px;
+    }
+
+    .brand-tagline {
+        display: none;
+    }
+
+    .level-progress-track {
+        width: 42px;
+    }
+
+    .level-percent {
+        display: none;
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   AAA RPG CYBER SIDEBAR NAVIGATION (True Frosted Glassmorphism)
+   ══════════════════════════════════════════════════ */
+.compact-dock {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 48px;
+    padding: 8px 0;
+    /* Authentic Translucent Frosted Glass */
+    background: rgba(6, 12, 30, 0.45);
+    backdrop-filter: blur(20px) saturate(190%) contrast(110%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%) contrast(110%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-left: none;
+    border-right: 1.5px solid rgba(56, 189, 248, 0.50);
+    border-radius: 0 20px 20px 0;
+    z-index: 95;
+    cursor: pointer;
+    overflow: hidden;
+    /* Butter-Smooth Hardware Accelerated Transition */
+    transition: width 0.38s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    will-change: width;
+    box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4), inset -1px 0 15px rgba(56, 189, 248, 0.10);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%) translateX(-48px);
+}
+
+.game-viewport.stage-revealed .compact-dock {
+    animation: dockSlideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+    pointer-events: auto;
+}
+
+.compact-dock:hover {
+    width: 172px;
+    background: rgba(8, 16, 38, 0.65);
+    border-right: 1.5px solid #38bdf8;
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.45), 0 0 22px rgba(56, 189, 248, 0.25);
+}
+
+@keyframes dockSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) translateX(-48px);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+        filter: blur(0px);
+    }
+}
+
+.dock-nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.dock-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    gap: 4px;
+}
+
+/* Individual Item Row - Glass Capsule */
+.dock-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 42px;
+    margin: 0 4px;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    color: #cbd5e1;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    user-select: none;
+    overflow: hidden;
+}
+
+.dock-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    min-width: 40px;
+    height: 42px;
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), color 0.22s ease, filter 0.22s ease;
+    color: #94a3b8;
+    opacity: 0.95;
+    filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.3));
+}
+
+.dock-icon svg {
+    display: block;
+    width: 17px;
+    height: 17px;
+}
+
+.dock-label {
+    display: block;
+    font-family: 'Rajdhani', 'Cinzel', 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-12px);
+    pointer-events: none;
+    transition: opacity 0.20s ease, transform 0.30s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease, text-shadow 0.2s ease;
+    padding-right: 14px;
+}
+
+.compact-dock:hover .dock-label {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.06s;
+    pointer-events: auto;
+}
+
+/* ── ACTIVE & HOVER GLASS PILL STATES (Sky Blue Frosted Glass) ── */
+.dock-item:hover {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.30);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.20), 0 0 12px rgba(56, 189, 248, 0.15);
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
+.dock-item.active {
+    background: rgba(56, 189, 248, 0.22);
+    border: 1px solid #38bdf8;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.30), inset 2px 0 10px rgba(56, 189, 248, 0.25), 0 0 16px rgba(56, 189, 248, 0.30);
+    color: #ffffff;
+}
+
+.dock-item.active .dock-active-glow {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    background: #38bdf8;
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 10px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.8);
+}
+
+.dock-item:hover .dock-icon,
+.dock-item.active .dock-icon {
+    color: #38bdf8;
+    opacity: 1;
+    transform: scale(1.10);
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.95)) drop-shadow(0 0 14px rgba(56, 189, 248, 0.8));
+}
+
+.dock-item:hover .dock-label,
+.dock-item.active .dock-label {
+    color: #ffffff;
+    font-weight: 800;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.85), 0 0 14px rgba(56, 189, 248, 0.7);
+}
+
+/* ══════════════════════════════════════════════════
+   WORLD MAP — ISLANDS (UNIFORM SIZE)
+   ══════════════════════════════════════════════════ */
+.world-map-stage {
+    position: absolute;
+    inset: 0;
+    top: 28px;
+    z-index: 10;
+    width: 100vw;
+    height: calc(100vh - 28px);
+    pointer-events: none;
+    transition: transform .75s cubic-bezier(.16, 1, .3, 1);
+    transform-origin: center center;
+    will-change: transform;
+}
+
+/* ── Island Selected / Active Chapter Highlight (Clean & Static Camera) ── */
+.island-node.is-focused {
+    z-index: 60;
+}
+
+.island-node.is-focused .island-art {
+    filter: brightness(1.08);
+}
+
+.island-node.is-focused .island-aura {
+    opacity: .75;
+    transform: scale(1.2);
+}
+
+.island-node.is-focused .sci-pill {
+    border-color: rgba(0, 229, 255, 0.9);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.45), 0 6px 20px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ── Energy Conduit Network (Removed per user request) ── */
+.energy-conduits {
+    display: none !important;
+}
+
+.energy-conduits.is-transitioning {
+    opacity: 0.60;
+    filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.45));
+}
+
+@keyframes conduitEntrance {
+    0% {
+        opacity: 0;
+        filter: blur(3px);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+    }
+}
+
+/* Individual Thin Tendril Strand */
+.tendril-strand {
+    stroke-linecap: round;
+    transition: all .35s ease;
+}
+
+/* Luminous Soft Purple Aura */
+.tendril-aura {
+    opacity: 0.82;
+    filter: drop-shadow(0 0 6px #c084fc) drop-shadow(0 0 12px #9333ea);
+    animation: tendrilAuraBreath 4s ease-in-out infinite alternate;
+}
+
+@keyframes tendrilAuraBreath {
+    0% {
+        opacity: 0.65;
+    }
+
+    50% {
+        opacity: 0.95;
+    }
+
+    100% {
+        opacity: 0.72;
+    }
+}
+
+/* Electric Arc Discharge */
+.tendril-arc {
+    opacity: 0.95;
+    filter: drop-shadow(0 0 4px #e879f9) drop-shadow(0 0 8px #a855f7);
+}
+
+/* White-Hot Electric Core */
+.tendril-core {
+    opacity: 1;
+    filter: drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 6px #c084fc);
+    animation: tendrilCoreFlicker 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes tendrilCoreFlicker {
+    0% {
+        opacity: 0.88;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.92;
+    }
+}
+
+/* High-speed voltage packet pulse */
+.tendril-bolt {
+    opacity: 1;
+    filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 8px #f0abfc);
+}
+
+.flow-fast-1 {
+    animation: tendrilBoltFlow1 3.2s linear infinite;
+}
+
+.flow-fast-2 {
+    animation: tendrilBoltFlow2 4.0s linear infinite;
+}
+
+.flow-fast-3 {
+    animation: tendrilBoltFlow3 4.8s linear infinite;
+}
+
+.flow-fast-4 {
+    animation: tendrilBoltFlow4 5.5s linear infinite;
+}
+
+@keyframes tendrilBoltFlow1 {
+    0% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: -160;
+    }
+}
+
+@keyframes tendrilBoltFlow2 {
+    0% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: -180;
+    }
+}
+
+@keyframes tendrilBoltFlow3 {
+    0% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: -200;
+    }
+}
+
+@keyframes tendrilBoltFlow4 {
+    0% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: -220;
+    }
+}
+
+/* Interactive Overcharge States */
+.energy-link {
+    transition: opacity .35s ease;
+}
+
+/* ======================================================
+   CINEMATIC ENERGY HIGHWAY NETWORK (STRAIGHT + CONTROLLED CURVE)
+   AAA Sci-Fi Dominant Route & Living Helical Filaments
+   ====================================================== */
+
+.energy-conduits path {
+    fill: none !important;
+}
+
+/* 1. Main Continuous Highway (Dominant Backbone: ~64% Straight + Gentle Natural Bend) */
+.main-route-glow {
+    fill: none !important;
+    stroke: url(#mainRouteCyanGlow);
+    stroke-width: 4.8px;
+    stroke-linecap: round;
+    opacity: 0.82;
+    filter: drop-shadow(0 0 5px #00e5ff) drop-shadow(0 0 12px rgba(0, 229, 255, 0.40));
+    animation: mainRouteAuraPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes mainRouteAuraPulse {
+    0% {
+        opacity: 0.72;
+        stroke-width: 4.2px;
+    }
+
+    100% {
+        opacity: 0.92;
+        stroke-width: 5.2px;
+    }
+}
+
+.main-route-core {
+    fill: none !important;
+    stroke: url(#mainRouteCoreGrad);
+    stroke-width: 1.9px;
+    stroke-linecap: round;
+    stroke-opacity: 0.98;
+    filter: drop-shadow(0 0 2px #ffffff) drop-shadow(0 0 6px #00e5ff);
+}
+
+/* 2. Traveling Energy Flow Along Path (Island -> Main Route -> Next Island) */
+
+/* Layer A: Small Moving Energy Particles */
+.main-route-particles {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2.0px;
+    stroke-linecap: round;
+    stroke-dasharray: 4 36;
+    animation: conduitParticlesTravel 2.4s linear infinite;
+    filter: drop-shadow(0 0 2.5px #ffffff) drop-shadow(0 0 5px #00e5ff);
+    pointer-events: none;
+}
+
+@keyframes conduitParticlesTravel {
+    0% {
+        stroke-dashoffset: 80;
+        opacity: 0.85;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.85;
+    }
+}
+
+/* Layer B: Subtle Traveling Glow Wave */
+.main-route-glow-wave {
+    fill: none;
+    stroke: #00e5ff;
+    stroke-width: 3.6px;
+    stroke-linecap: round;
+    stroke-dasharray: 45 200;
+    opacity: 0.65;
+    animation: conduitGlowWaveTravel 3.4s linear infinite;
+    filter: drop-shadow(0 0 6px #00e5ff) drop-shadow(0 0 12px rgba(56, 189, 248, 0.45));
+    pointer-events: none;
+}
+
+@keyframes conduitGlowWaveTravel {
+    0% {
+        stroke-dashoffset: 245;
+        opacity: 0.2;
+    }
+
+    20% {
+        opacity: 0.8;
+    }
+
+    80% {
+        opacity: 0.8;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.2;
+    }
+}
+
+/* Layer C: Occasional Brighter Energy Pulse */
+.main-route-surge-pulse {
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 3.2px;
+    stroke-linecap: round;
+    stroke-dasharray: 28 360;
+    animation: conduitSurgePulseTravel 4.2s cubic-bezier(0.35, 0, 0.25, 1) infinite;
+    filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 9px #00e5ff) drop-shadow(0 0 16px #c084fc);
+    pointer-events: none;
+}
+
+@keyframes conduitSurgePulseTravel {
+    0% {
+        stroke-dashoffset: 388;
+        opacity: 0.1;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.1;
+    }
+}
+
+/* 3. Secondary Living Strands (Gently Curving Around the Main Route) */
+.spiral-strand {
+    fill: none;
+    stroke-linecap: round;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.spiral-strand-1 {
+    stroke: #00e5ff;
+    stroke-width: 1.05px;
+    stroke-dasharray: 9 5;
+    opacity: 0.72;
+    animation: strandFlow1 3.2s linear infinite;
+    filter: drop-shadow(0 0 3px rgba(0, 229, 255, 0.65));
+}
+
+.spiral-strand-2 {
+    stroke: url(#spiralStrandViolet);
+    stroke-width: 0.95px;
+    stroke-dasharray: 12 6;
+    opacity: 0.68;
+    animation: strandFlow2 4.2s linear infinite;
+    filter: drop-shadow(0 0 3px rgba(139, 92, 246, 0.65));
+}
+
+.spiral-strand-3 {
+    stroke: url(#spiralStrandDual);
+    stroke-width: 1.0px;
+    stroke-dasharray: 8 6;
+    opacity: 0.70;
+    animation: strandFlow3 3.6s linear infinite;
+    filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.55));
+}
+
+.spiral-strand-4 {
+    stroke: #c084fc;
+    stroke-width: 0.85px;
+    stroke-dasharray: 11 7;
+    opacity: 0.65;
+    animation: strandFlow4 4.8s linear infinite;
+    filter: drop-shadow(0 0 3px rgba(192, 132, 252, 0.5));
+}
+
+@keyframes strandFlow1 {
+    from {
+        stroke-dashoffset: 56;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes strandFlow2 {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: 72;
+    }
+}
+
+@keyframes strandFlow3 {
+    from {
+        stroke-dashoffset: 56;
+    }
+
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes strandFlow4 {
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: 72;
+    }
+}
+
+/* 4. Architectural Energy Node Embedded in Island Infrastructure */
+.island-energy-node {
+    pointer-events: none;
+}
+
+.node-ambient-glow {
+    fill: rgba(0, 229, 255, 0.28);
+    filter: blur(5px);
+    animation: nodeAmbientBreath 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes nodeAmbientBreath {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.22;
+    }
+
+    100% {
+        transform: scale(1.18);
+        opacity: 0.38;
+    }
+}
+
+.node-intake-halo {
+    fill: none;
+    stroke: rgba(56, 189, 248, 0.65);
+    stroke-width: 1.0px;
+    stroke-dasharray: 2 3;
+    animation: nodeIntakeBreath 2.6s ease-in-out infinite alternate;
+    transform-origin: center center;
+}
+
+@keyframes nodeIntakeBreath {
+    0% {
+        transform: scale(0.85);
+        opacity: 0.45;
+    }
+
+    100% {
+        transform: scale(1.22);
+        opacity: 0.90;
+    }
+}
+
+.node-outer-ring {
+    fill: none;
+    stroke: rgba(0, 229, 255, 0.85);
+    stroke-width: 1.2px;
+    stroke-dasharray: 4 3;
+    animation: nodeRingSpin 10s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.75));
+    transform-origin: center center;
+}
+
+@keyframes nodeRingSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.node-core-dot {
+    fill: #ffffff;
+    filter: drop-shadow(0 0 3px #ffffff) drop-shadow(0 0 7px #00e5ff) drop-shadow(0 0 14px #8b5cf6);
+}
+
+/* ======================================================
+   3D CELESTIAL ORBITAL CAROUSEL STAGE & 3D PERSPECTIVE
+   Hero Center Island + 3D Arc Flanking Islands
+   ====================================================== */
+
+.orbital-carousel-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    perspective: 1400px;
+    perspective-origin: 50% 50%;
+    transform-style: preserve-3d;
+    overflow: hidden;
+    z-index: 15;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.game-viewport.stage-revealed .orbital-carousel-container {
+    opacity: 1;
+}
+
+
+
+.orbital-islands-stage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    pointer-events: none;
+    z-index: 20;
+}
+
+/* ── Island Node (3D Orbit Unit) ── */
+.island-node {
+    position: absolute;
+    left: 47%;
+    top: 52%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto;
+    cursor: pointer;
+    transform-origin: center center;
+    transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+        opacity 0.60s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.50s ease;
+    will-change: transform, opacity;
+}
+
+/* Slot 0: Hero Center Island (Majestic, Focal Point) */
+.island-node.slot-center {
+    transform: translate3d(-50%, calc(-50% - 10px), 80px) scale(1.26);
+    opacity: 1;
+    visibility: visible;
+    z-index: 60;
+}
+
+.island-node .island-img {
+    width: 235px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 22px rgba(15, 23, 42, 0.22)) drop-shadow(0 4px 10px rgba(30, 58, 138, 0.14));
+    transition: width 0.72s cubic-bezier(0.16, 1, 0.3, 1), filter 0.50s ease, transform 0.40s ease;
+    will-change: width, transform;
+    pointer-events: none;
+}
+
+/* Uniform Hero Size when selected in Center Slot */
+.island-node.slot-center .island-img {
+    width: 235px !important;
+    filter: drop-shadow(0 26px 42px rgba(15, 23, 42, 0.30)) drop-shadow(0 10px 20px rgba(30, 58, 138, 0.18)) drop-shadow(0 0 24px rgba(56, 189, 248, 0.28));
+}
+
+.island-node.slot-center .island-aura {
+    width: 285px !important;
+    height: 285px !important;
+    opacity: 0.55;
+    transform: scale(1.35);
+    filter: blur(55px);
+}
+
+/* Floating Animations for Islands */
+.island-node.slot-center .island-art {
+    animation: celestialIslandFloatCenter 4.8s ease-in-out infinite alternate;
+}
+
+.island-node:not(.slot-center) .island-art {
+    animation: celestialIslandFloatFlank 4.5s ease-in-out infinite alternate;
+}
+
+.island-node.slot-center .island-aura {
+    animation: auraOrganicPulse 8.0s ease-in-out infinite alternate;
+}
+
+@keyframes heroIslandAuraPulse {
+    0% {
+        opacity: 0.2;
+        transform: scale(0.9);
+    }
+    40% {
+        opacity: 0.85;
+        transform: scale(1.55);
+        filter: blur(40px);
+    }
+    100% {
+        opacity: 0.55;
+        transform: scale(1.35);
+        filter: blur(55px);
+    }
+}
+
+.island-node.slot-center .island-orbit-badge {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(-10px) scale(0.9) !important;
+}
+
+.island-node.slot-center .loc-card {
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    margin-left: 0 !important;
+    margin-top: -12px !important;
+    will-change: transform, opacity;
+    animation: plateCardSlideArrival 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+@keyframes plateCardSlideArrival {
+    0% {
+        opacity: 0;
+        transform: translateY(16px) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Flanking islands: Hide bulky mission card, show only sleek sector badge */
+.island-node:not(.slot-center) .loc-card {
+    display: none !important;
+}
+
+.island-node:not(.slot-center) .island-orbit-badge {
+    display: inline-flex !important;
+}
+
+/* ── Celestial Orbital Dais & Energy Rings (Selected Hero Island) ── */
+.island-energy-ripples {
+    position: absolute;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%) rotateX(72deg);
+    width: 260px;
+    height: 260px;
+    pointer-events: none;
+    z-index: -1;
+    transform-style: preserve-3d;
+}
+
+/* Ambient Radial Starlight Mist beneath Island */
+.island-energy-ripples::before {
+    content: '';
+    position: absolute;
+    inset: -15px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.28) 0%, rgba(147, 197, 253, 0.14) 45%, transparent 72%);
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+/* Stationary Luminous Orbit Halo */
+.island-energy-ripples::after {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    border: 1.2px dashed rgba(147, 197, 253, 0.55);
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.35), inset 0 0 12px rgba(255, 255, 255, 0.45);
+    animation: celestialFlatDaisSpin 24s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes celestialFlatDaisSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.energy-ripple {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.2px solid rgba(56, 189, 248, 0.7);
+    opacity: 0;
+    transform: scale(0.35);
+    transform-origin: center center;
+    animation: none;
+}
+
+/* Only show ripples on the center (selected) island */
+.island-node.slot-center .energy-ripple {
+    animation: energyRippleExpand 4.6s cubic-bezier(0.18, 0.6, 0.35, 1) infinite;
+}
+
+.island-node.slot-center .energy-ripple.ripple-1 {
+    animation-delay: 0s;
+    border-color: rgba(56, 189, 248, 0.85);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.45),
+        inset 0 0 8px rgba(255, 255, 255, 0.45);
+}
+
+.island-node.slot-center .energy-ripple.ripple-2 {
+    animation-delay: -1.53s;
+    border-color: rgba(129, 140, 248, 0.75);
+    box-shadow: 0 0 14px rgba(129, 140, 248, 0.40),
+        inset 0 0 8px rgba(255, 255, 255, 0.40);
+}
+
+.island-node.slot-center .energy-ripple.ripple-3 {
+    animation-delay: -3.06s;
+    border-color: rgba(147, 197, 253, 0.80);
+    box-shadow: 0 0 14px rgba(147, 197, 253, 0.40),
+        inset 0 0 8px rgba(255, 255, 255, 0.40);
+}
+
+/* Hide ripples on flanking islands */
+.island-node:not(.slot-center) .island-energy-ripples {
+    display: none;
+}
+
+@keyframes energyRippleExpand {
+    0% {
+        transform: scale(0.35);
+        opacity: 0;
+    }
+
+    18% {
+        opacity: 0.85;
+    }
+
+    55% {
+        opacity: 0.45;
+    }
+
+    100% {
+        transform: scale(1.75);
+        opacity: 0;
+    }
+}
+
+/* Slot +1: Near-Right */
+.island-node.slot-right-1 {
+    transform: translate3d(calc(-50% + 350px), calc(-50% - 75px), -30px) scale(0.78);
+    opacity: 0.95;
+    visibility: visible;
+    z-index: 45;
+    filter: brightness(0.95);
+}
+
+/* Slot -1: Near-Left */
+.island-node.slot-left-1 {
+    transform: translate3d(calc(-50% - 350px), calc(-50% + 55px), -30px) scale(0.78);
+    opacity: 0.95;
+    visibility: visible;
+    z-index: 45;
+    filter: brightness(0.95);
+}
+
+/* Slot +2: Mid-Right */
+.island-node.slot-right-2 {
+    transform: translate3d(calc(-50% + 530px), calc(-50% + 70px), -110px) scale(0.62);
+    opacity: 0.90;
+    visibility: visible;
+    z-index: 35;
+    filter: brightness(0.88);
+}
+
+/* Slot -2: Mid-Left */
+.island-node.slot-left-2 {
+    transform: translate3d(calc(-50% - 530px), calc(-50% - 90px), -110px) scale(0.62);
+    opacity: 0.90;
+    visibility: visible;
+    z-index: 35;
+    filter: brightness(0.88);
+}
+
+/* Slot +3: Outer-Right Horizon */
+.island-node.slot-right-3 {
+    transform: translate3d(calc(-50% + 370px), calc(-50% + 175px), -190px) scale(0.50);
+    opacity: 0.85;
+    visibility: visible;
+    z-index: 25;
+    filter: brightness(0.80);
+}
+
+/* Slot -3: Outer-Left Horizon */
+.island-node.slot-left-3 {
+    transform: translate3d(calc(-50% - 370px), calc(-50% - 210px), -190px) scale(0.50);
+    opacity: 0.85;
+    visibility: visible;
+    z-index: 25;
+    filter: brightness(0.80);
+}
+
+/* Slot +4: Far Deep Cosmic Right */
+.island-node.slot-right-4 {
+    transform: translate3d(calc(-50% + 170px), calc(-50% - 220px), -260px) scale(0.42);
+    opacity: 0.80;
+    visibility: visible;
+    z-index: 20;
+    filter: brightness(0.75);
+}
+
+/* Slot -4: Far Deep Cosmic Left */
+.island-node.slot-left-4 {
+    transform: translate3d(calc(-50% - 170px), calc(-50% + 185px), -260px) scale(0.42);
+    opacity: 0.80;
+    visibility: visible;
+    z-index: 20;
+    filter: brightness(0.75);
+}
+
+/* ── Enhanced 3D Zero-Gravity Celestial Island Floating Animation ── */
+@keyframes celestialIslandFloatCenter {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(0.8deg);
+    }
+    100% {
+        transform: translateY(8px) rotate(-0.6deg);
+    }
+}
+
+@keyframes celestialIslandFloatFlank {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-15px) rotate(0.6deg);
+    }
+    100% {
+        transform: translateY(7px) rotate(-0.5deg);
+    }
+}
+
+/* Atmospheric Floating Island Ground Shadow Breathing */
+@keyframes celestialShadowBreathe {
+    0% {
+        transform: translateX(-50%) scale(1.0);
+        opacity: 0.32;
+        filter: blur(10px);
+    }
+    50% {
+        transform: translateX(-50%) scale(0.80) translateY(10px);
+        opacity: 0.15;
+        filter: blur(16px);
+    }
+    100% {
+        transform: translateX(-50%) scale(1.08) translateY(-4px);
+        opacity: 0.42;
+        filter: blur(8px);
+    }
+}
+
+.island-art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: celestialIslandFloatCenter 4.8s ease-in-out infinite alternate;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+    will-change: transform;
+}
+
+.island-node:not(.slot-center) .island-art {
+    animation: celestialIslandFloatFlank 4.4s ease-in-out infinite alternate;
+}
+
+/* Atmospheric Floating Island Ground Shadow */
+.island-art::after {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 78%;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.45) 0%, rgba(30, 58, 138, 0.20) 45%, transparent 75%);
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: -2;
+    animation: celestialShadowBreathe 4.8s ease-in-out infinite alternate;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, filter 0.4s ease;
+    will-change: transform, opacity, filter;
+}
+
+.island-node:not(.slot-center) .island-art::after {
+    animation: celestialShadowBreathe 4.4s ease-in-out infinite alternate;
+}
+
+.island-aura {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    transition: opacity 0.60s cubic-bezier(0.16, 1, 0.3, 1), transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), width 0.72s cubic-bezier(0.16, 1, 0.3, 1), height 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+/* ── Minimal Smooth Staggered Island Entrance ── */
+@keyframes islandEntranceAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(32px) scale(0.80);
+        filter: blur(8px) brightness(1.25);
+    }
+
+    60% {
+        opacity: 0.95;
+        transform: translateY(-4px) scale(1.02);
+        filter: blur(0px) brightness(1.08);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+        filter: blur(0px) brightness(1.0);
+    }
+}
+
+@keyframes islandAuraEntrance {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+        filter: blur(20px);
+    }
+
+    100% {
+        opacity: 0.55;
+        transform: scale(1.35);
+        filter: blur(55px);
+    }
+}
+
+@keyframes islandBadgeAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.88);
+        filter: blur(4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+@keyframes ripplesAppear {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) rotateX(72deg) scale(0.4);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) rotateX(72deg) scale(1);
+        filter: blur(0px);
+    }
+}
+
+@keyframes navBtnEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.72);
+        filter: blur(4px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* ── Hero Center Island Cinematic Initial Entrance ── */
+@keyframes heroIslandEntranceAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(48px) scale(0.72);
+        filter: blur(12px) brightness(1.35) drop-shadow(0 0 32px rgba(56, 189, 248, 0.8));
+    }
+    55% {
+        opacity: 0.96;
+        transform: translateY(-8px) scale(1.04);
+        filter: blur(0px) brightness(1.12) drop-shadow(0 0 20px rgba(168, 85, 247, 0.5));
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+        filter: blur(0px) brightness(1.0);
+    }
+}
+
+/* Island 1 (Hero Center) - Initial Entrance */
+.game-viewport.stage-entering .island-node[data-island="1"] .island-art {
+    animation: heroIslandEntranceAppear 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="1"] .island-aura {
+    animation: heroIslandAuraEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="1"] .loc-card {
+    animation: plateCardSlideArrival 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="1"] .island-energy-ripples {
+    animation: ripplesAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.10s both;
+}
+
+/* Island 2 (Right-1) */
+.game-viewport.stage-entering .island-node[data-island="2"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="2"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="2"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+}
+
+/* Island 9 (Left-1) */
+.game-viewport.stage-entering .island-node[data-island="9"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="9"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="9"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+}
+
+/* Island 3 (Right-2) */
+.game-viewport.stage-entering .island-node[data-island="3"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="3"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="3"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.26s both;
+}
+
+/* Island 8 (Left-2) */
+.game-viewport.stage-entering .island-node[data-island="8"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="8"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="8"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.30s both;
+}
+
+/* Island 4 (Right-3) */
+.game-viewport.stage-entering .island-node[data-island="4"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="4"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="4"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+}
+
+/* Island 7 (Left-3) */
+.game-viewport.stage-entering .island-node[data-island="7"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="7"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="7"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.38s both;
+}
+
+/* Island 5 (Right-4) */
+.game-viewport.stage-entering .island-node[data-island="5"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="5"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.36s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="5"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.42s both;
+}
+
+/* Island 6 (Left-4) */
+.game-viewport.stage-entering .island-node[data-island="6"] .island-art {
+    animation: islandEntranceAppear 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.40s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="6"] .island-aura {
+    animation: islandAuraEntrance 0.70s cubic-bezier(0.16, 1, 0.3, 1) 0.40s both;
+}
+
+.game-viewport.stage-entering .island-node[data-island="6"] .island-orbit-badge {
+    animation: islandBadgeAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.46s both;
+}
+
+/* ── Clean 3D Tactile Island Levitation Hover ── */
+.island-node:hover {
+    cursor: pointer;
+}
+
+.island-node:not(.slot-center):hover .island-img {
+    transform: translateY(-14px) scale(1.08);
+}
+
+.island-node.slot-center:hover .island-img {
+    transform: translateY(-10px) scale(1.05);
+}
+
+.island-node:hover .island-art::after {
+    transform: translateX(-50%) scale(0.82) translateY(6px);
+    opacity: 0.50;
+    filter: blur(12px);
+}
+
+.island-node:hover .island-plate-card {
+    transform: translateY(-4px);
+}
+
+/* ── Top Sector Badge (Clean Frosted Glass Pill, No Glow) ── */
+.island-orbit-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 14px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.78) 0%, rgba(240, 248, 255, 0.55) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1.2px solid rgba(255, 255, 255, 0.90);
+    border-radius: 999px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08), inset 0 1px 1px #ffffff;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    position: relative;
+    pointer-events: none;
+    z-index: 25;
+}
+
+.island-orbit-badge .badge-title-text {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #0f172a;
+    text-transform: uppercase;
+    text-shadow: none;
+}
+
+.island-orbit-badge .badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0284c7;
+    box-shadow: none;
+}
+
+.island-orbit-badge .badge-lock-icon {
+    font-size: 11px;
+    color: #ef4444;
+    filter: none;
+}
+
+.island-orbit-badge.is-locked {
+    border: 1.2px solid rgba(255, 255, 255, 0.75);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.60) 0%, rgba(238, 244, 255, 0.42) 100%);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06), inset 0 1px 1px #ffffff;
+}
+
+.island-orbit-badge.is-locked .badge-title-text {
+    color: #475569;
+    text-shadow: none;
+}
+
+/* ── Premium Glass Orbital Navigation Chevrons (< and >) ── */
+.carousel-nav-btn {
+    position: absolute;
+    top: 52%;
+    transform: translateY(-50%);
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(235, 243, 255, 0.22) 50%, rgba(255, 255, 255, 0.35) 100%);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1.2px solid rgba(255, 255, 255, 0.75);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(0, 0, 0, 0.04), inset 0 1px 1px rgba(255, 255, 255, 0.9), inset 0 -1px 2px rgba(147, 197, 253, 0.25);
+    color: #1e3a8a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    pointer-events: none;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+    outline: none;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.65);
+}
+
+.game-viewport.stage-revealed .carousel-nav-btn {
+    animation: navBtnEntrance 0.50s cubic-bezier(0.16, 1, 0.3, 1) 0.30s both;
+    pointer-events: auto;
+}
+
+.carousel-nav-btn.nav-btn-prev {
+    left: 85px;
+}
+
+.carousel-nav-btn.nav-btn-next {
+    right: 255px;
+}
+
+.carousel-nav-btn .nav-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.carousel-nav-btn .nav-btn-icon svg {
+    width: 26px;
+    height: 26px;
+    stroke-width: 2.2;
+    filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.8));
+}
+
+.carousel-nav-btn:hover {
+    transform: translateY(-50%) scale(1.08);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(240, 247, 255, 0.45) 50%, rgba(255, 255, 255, 0.65) 100%);
+    border-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.15), 0 0 18px rgba(56, 189, 248, 0.35), inset 0 1px 1.5px #ffffff;
+    color: #0f172a;
+}
+
+.carousel-nav-btn.nav-btn-prev:hover .nav-btn-icon {
+    transform: translateX(-3px);
+}
+
+.carousel-nav-btn.nav-btn-next:hover .nav-btn-icon {
+    transform: translateX(3px);
+}
+
+.carousel-nav-btn:active,
+.carousel-nav-btn.btn-pressed {
+    transform: translateY(-50%) scale(0.92);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.90) 0%, rgba(224, 242, 254, 0.75) 100%);
+    border-color: #38bdf8;
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.75), inset 0 1px 2px #ffffff;
+    color: #0284c7;
+}
+
+.carousel-nav-btn .nav-btn-aura {
+    display: none;
+}
+
+@media (max-width: 1100px) {
+    .island-node.slot-center {
+        transform: translate3d(-50%, -50%, 60px) scale(1.2);
+    }
+
+    .island-node.slot-right-1 {
+        transform: translate3d(calc(-50% + 290px), calc(-50% - 25px), -100px) scale(0.72);
+    }
+
+    .island-node.slot-left-1 {
+        transform: translate3d(calc(-50% - 290px), calc(-50% + 35px), -100px) scale(0.72);
+    }
+
+    .island-node.slot-right-2 {
+        transform: translate3d(calc(-50% + 540px), calc(-50% + 60px), -220px) scale(0.50);
+    }
+
+    .island-node.slot-left-2 {
+        transform: translate3d(calc(-50% - 540px), calc(-50% - 50px), -220px) scale(0.50);
+    }
+
+    .carousel-nav-btn.nav-btn-prev {
+        left: 16px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .carousel-nav-btn.nav-btn-next {
+        right: 16px;
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 768px) {
+    .island-node.slot-center {
+        transform: translate3d(-50%, -50%, 40px) scale(1.05);
+    }
+
+    .island-node.slot-right-1 {
+        transform: translate3d(calc(-50% + 180px), calc(-50% - 15px), -90px) scale(0.60);
+    }
+
+    .island-node.slot-left-1 {
+        transform: translate3d(calc(-50% - 180px), calc(-50% + 25px), -90px) scale(0.60);
+    }
+
+    .island-node.slot-right-2,
+    .island-node.slot-left-2 {
+        display: none;
+    }
+
+    .carousel-nav-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .carousel-nav-btn.nav-btn-prev {
+        left: 8px;
+    }
+
+    .carousel-nav-btn.nav-btn-next {
+        right: 8px;
+    }
+}
+
+/* ── HOVER: Smooth 0.4s Ease Scale & Lift ── */
+.island-node:hover,
+.island-node:focus-visible {
+    z-index: 35;
+}
+
+/* Hover: Aura expands smoothly */
+.island-node:hover .island-aura,
+.island-node:focus-visible .island-aura {
+    opacity: .90;
+    transform: scale(1.32);
+    filter: blur(48px);
+}
+
+/* Hover: Label card remains stationary */
+.island-node:hover .loc-card,
+.island-node:focus-visible .loc-card {
+    transform: none;
+}
+
+/* Label-above variant (for islands near central area) */
+.label-above {
+    flex-direction: column;
+}
+
+.label-above .loc-card {
+    order: -1;
+    margin-bottom: 6px;
+    margin-top: 0;
+}
+
+
+
+
+
+.island-img {
+    width: 250px;
+    height: auto;
+    display: block;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* ══════════════════════════════════════════════════
+   ISLAND SIZES & BALANCED PERSPECTIVE SCALING
+   (Exact Reference Architecture: Large, Medium, Compact)
+   ══════════════════════════════════════════════════ */
+
+/* Centerpiece Island 1 (Pattern Observatory - Central Hub) */
+.island-1 {
+    z-index: 25;
+}
+
+.island-node:not(.slot-center).island-1 .island-img {
+    width: 235px;
+    filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.94));
+}
+
+.island-node:not(.slot-center).island-1 .island-aura {
+    width: 285px;
+    height: 285px;
+    opacity: 0.38;
+}
+
+.island-node:not(.slot-center).island-1 .loc-card {
+    margin-top: -26px;
+    z-index: 30;
+}
+
+/* ── Distinct Peripheral Island Sizing: "Kuch Chota, Kuch Bade" in Side Orbit ── */
+/* Large Islands */
+.island-node:not(.slot-center).island-9 .island-img {
+    width: 205px;
+}
+
+/* Placement Arena (Grand Colosseum) */
+.island-node:not(.slot-center).island-2 .island-img {
+    width: 195px;
+}
+
+/* Logic Nexus (Sprawling Crystals) */
+.island-node:not(.slot-center).island-3 .island-img {
+    width: 195px;
+}
+
+/* Programming District (Neon City) */
+.island-node:not(.slot-center).island-4 .island-img {
+    width: 195px;
+}
+
+/* Algorithm Forge (Great Cogwheel) */
+
+/* Medium Islands */
+.island-node:not(.slot-center).island-8 .island-img {
+    width: 175px;
+}
+
+/* Communication Citadel */
+.island-node:not(.slot-center).island-6 .island-img {
+    width: 170px;
+}
+
+/* Network Grid (Flat Disc) */
+
+/* Compact (Chota) Islands - Distinct in Side Orbit */
+.island-node:not(.slot-center).island-7 .island-img {
+    width: 135px;
+}
+
+/* System Core (Compact Golden Core) */
+.island-node:not(.slot-center).island-5 .island-img {
+    width: 135px;
+}
+
+/* Database Vault (Compact Green Cyber Cube) */
+
+/* ── Exact Zero-Overlap Card Positioning (Matches Reference Frame) ── */
+.loc-card {
+    margin-top: -20px;
+    position: relative;
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+    transition: all .35s cubic-bezier(.16, 1, .3, 1);
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.88));
+}
+
+/* Island 3 Card */
+.island-3 .loc-card {
+    margin-top: -18px;
+}
+
+/* Island 4 Card */
+.island-4 .loc-card {
+    margin-top: -18px;
+}
+
+/* Island 9 Card */
+.island-9 .loc-card {
+    margin-top: -18px;
+}
+
+/* Island 2 Card */
+.island-2 .loc-card {
+    margin-top: -22px;
+    margin-left: -24px;
+}
+
+/* Island 5 Card (Compact) */
+.island-5 .loc-card {
+    margin-top: -16px;
+}
+
+/* Island 6 Card */
+.island-6 .loc-card {
+    margin-top: -18px;
+    margin-left: 20px;
+}
+
+/* Island 7 Card (Compact Core - Zero overlap with Island 1) */
+.island-7 .loc-card {
+    margin-top: -16px;
+}
+
+/* Island 8 Card */
+.island-8 .loc-card {
+    margin-top: -18px;
+}
+
+/* Scaled Peripheral Auras in Side Orbit */
+.island-node:not(.slot-center).island-2 .island-aura,
+.island-node:not(.slot-center).island-3 .island-aura,
+.island-node:not(.slot-center).island-4 .island-aura,
+.island-node:not(.slot-center).island-9 .island-aura {
+    width: 250px;
+    height: 250px;
+}
+
+.island-node:not(.slot-center).island-6 .island-aura,
+.island-node:not(.slot-center).island-8 .island-aura {
+    width: 210px;
+    height: 210px;
+}
+
+.island-node:not(.slot-center).island-5 .island-aura,
+.island-node:not(.slot-center).island-7 .island-aura {
+    width: 170px;
+    height: 170px;
+}
+
+/* ══════════════════════════════════════════════════
+   ISLAND AURAS & COLOR-MATCHED STARDUST PARTICLES
+   (Inspired by Daily Reward Chest Glow & Particles)
+   ══════════════════════════════════════════════════ */
+
+/* Aura — Controlled Atmospheric Breathing */
+.island-aura {
+    position: absolute;
+    width: 275px;
+    height: 275px;
+    border-radius: 50%;
+    filter: blur(34px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: -1;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    transition: opacity .45s cubic-bezier(.16, 1, .3, 1), transform .45s cubic-bezier(.16, 1, .3, 1), filter .45s ease;
+    animation: auraOrganicPulse 8.5s ease-in-out infinite alternate;
+}
+
+@keyframes auraOrganicPulse {
+    0% {
+        opacity: .38;
+        transform: scale(0.95) translateZ(0);
+    }
+
+    100% {
+        opacity: .65;
+        transform: scale(1.08) translateZ(0);
+    }
+}
+
+/* Stagger aura breathing frequencies per island so they breathe independently */
+.island-1 .island-aura {
+    animation-duration: 8.0s;
+    animation-delay: 0s;
+}
+
+.island-2 .island-aura {
+    animation-duration: 9.2s;
+    animation-delay: -2.5s;
+}
+
+.island-3 .island-aura {
+    animation-duration: 8.5s;
+    animation-delay: -4.8s;
+}
+
+.island-4 .island-aura {
+    animation-duration: 9.8s;
+    animation-delay: -1.6s;
+}
+
+.island-5 .island-aura {
+    animation-duration: 8.8s;
+    animation-delay: -6.2s;
+}
+
+.island-6 .island-aura {
+    animation-duration: 10.2s;
+    animation-delay: -3.4s;
+}
+
+.island-7 .island-aura {
+    animation-duration: 8.4s;
+    animation-delay: -5.8s;
+}
+
+.island-8 .island-aura {
+    animation-duration: 9.6s;
+    animation-delay: -8.0s;
+}
+
+.island-9 .island-aura {
+    animation-duration: 9.0s;
+    animation-delay: -1.0s;
+}
+
+/* ── Rich Multi-Stop Radial Auras (Sunburst Aura Architecture) ── */
+.aura-violet {
+    background: radial-gradient(circle, rgba(168, 85, 247, .55) 0%, rgba(139, 92, 246, .35) 35%, rgba(99, 102, 241, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(168, 85, 247, 0.6));
+}
+
+.aura-cyan {
+    background: radial-gradient(circle, rgba(0, 229, 255, .55) 0%, rgba(14, 165, 233, .35) 35%, rgba(2, 132, 199, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(0, 229, 255, 0.6));
+}
+
+.aura-blue {
+    background: radial-gradient(circle, rgba(59, 130, 246, .52) 0%, rgba(37, 99, 235, .32) 35%, rgba(29, 78, 216, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(59, 130, 246, 0.55));
+}
+
+.aura-amber {
+    background: radial-gradient(circle, rgba(245, 158, 11, .55) 0%, rgba(217, 119, 6, .35) 35%, rgba(180, 83, 9, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(245, 158, 11, 0.6));
+}
+
+.aura-emerald {
+    background: radial-gradient(circle, rgba(16, 185, 129, .55) 0%, rgba(5, 150, 105, .35) 35%, rgba(4, 120, 87, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(16, 185, 129, 0.6));
+}
+
+.aura-gold {
+    background: radial-gradient(circle, rgba(234, 179, 8, .55) 0%, rgba(202, 138, 4, .35) 35%, rgba(161, 98, 7, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 18px rgba(234, 179, 8, 0.65));
+}
+
+.aura-purple {
+    background: radial-gradient(circle, rgba(236, 72, 153, .55) 0%, rgba(219, 39, 119, .35) 35%, rgba(157, 23, 77, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(236, 72, 153, 0.6));
+}
+
+.aura-crimson {
+    background: radial-gradient(circle, rgba(239, 68, 68, .55) 0%, rgba(220, 38, 38, .35) 35%, rgba(153, 27, 27, .15) 60%, transparent 75%);
+    filter: blur(32px) drop-shadow(0 0 16px rgba(239, 68, 68, 0.6));
+}
+
+/* ══════════════════════════════════════════════════
+   AMBIENT STARDUST PARTICLES FOR UNLOCKED ISLANDS
+   ══════════════════════════════════════════════════ */
+.island-sparkles {
+    position: absolute;
+    inset: -18px;
+    pointer-events: none;
+    z-index: 6;
+    overflow: visible;
+}
+
+.isl-sparkle {
+    position: absolute;
+    font-size: 11px;
+    line-height: 1;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px currentColor);
+    animation: islandSparkleFloat 3.8s ease-in-out infinite;
+}
+
+.isl-sparkle.sp-1 {
+    top: 12%;
+    left: 16%;
+    font-size: 13px;
+    animation-delay: 0s;
+}
+
+.isl-sparkle.sp-2 {
+    top: 18%;
+    right: 18%;
+    font-size: 9px;
+    animation-delay: 0.95s;
+}
+
+.isl-sparkle.sp-3 {
+    bottom: 26%;
+    left: 20%;
+    font-size: 10.5px;
+    animation-delay: 1.9s;
+}
+
+.isl-sparkle.sp-4 {
+    bottom: 20%;
+    right: 22%;
+    font-size: 14px;
+    animation-delay: 2.85s;
+}
+
+@keyframes islandSparkleFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(6px) scale(0.5) rotate(0deg);
+    }
+
+    35% {
+        opacity: 0.95;
+        transform: translateY(-4px) scale(1.15) rotate(15deg);
+    }
+
+    75% {
+        opacity: 0.6;
+        transform: translateY(-14px) scale(0.85) rotate(-10deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-22px) scale(0.3) rotate(25deg);
+    }
+}
+
+/* ── Island Specific Sparkle Colors (Matching Theme Exactly) ── */
+.island-1 .isl-sparkle {
+    color: #c084fc;
+    text-shadow: 0 0 8px #a855f7, 0 0 16px #7e22ce;
+}
+
+.island-2 .isl-sparkle {
+    color: #38bdf8;
+    text-shadow: 0 0 8px #00e5ff, 0 0 16px #0284c7;
+}
+
+.island-3 .isl-sparkle {
+    color: #60a5fa;
+    text-shadow: 0 0 8px #3b82f6, 0 0 16px #1d4ed8;
+}
+
+.island-4 .isl-sparkle {
+    color: #fbbf24;
+    text-shadow: 0 0 8px #f59e0b, 0 0 16px #d97706;
+}
+
+.island-5 .isl-sparkle {
+    color: #34d399;
+    text-shadow: 0 0 8px #10b981, 0 0 16px #047857;
+}
+
+.island-6 .isl-sparkle {
+    color: #22d3ee;
+    text-shadow: 0 0 8px #06b6d4, 0 0 16px #0e7490;
+}
+
+.island-7 .isl-sparkle {
+    color: #fde047;
+    text-shadow: 0 0 8px #eab308, 0 0 16px #a16207;
+}
+
+.island-8 .isl-sparkle {
+    color: #818cf8;
+    text-shadow: 0 0 8px #6366f1, 0 0 16px #4338ca;
+}
+
+.island-9 .isl-sparkle {
+    color: #f472b6;
+    text-shadow: 0 0 8px #ec4899, 0 0 16px #be185d;
+}
+
+/* ══════════════════════════════════════════════════
+   1. UNLOCKED ISLANDS: Radiant Glow & Alive Particles
+   ══════════════════════════════════════════════════ */
+.island-node.is-unlocked .island-sparkles {
+    display: block;
+}
+
+.island-node.is-unlocked .island-aura {
+    opacity: 0.52;
+}
+
+.island-node.is-unlocked:hover .island-aura,
+.island-node.is-unlocked:focus-visible .island-aura {
+    opacity: 0.95;
+    transform: scale(1.35);
+    filter: blur(44px);
+}
+
+.island-node.is-unlocked .island-img {
+    filter: drop-shadow(0 16px 28px rgba(15, 23, 42, 0.24)) drop-shadow(0 4px 10px rgba(30, 58, 138, 0.14));
+    transition: filter .4s ease, transform .4s ease;
+}
+
+/* ══════════════════════════════════════════════════
+   2. LOCKED ISLANDS: Ethereal Celestial Sky-Blue / Azure Silhouette
+   ══════════════════════════════════════════════════ */
+.island-node.is-locked .island-sparkles {
+    display: none !important;
+}
+
+.island-node.is-locked .island-aura {
+    opacity: 0.25 !important;
+    filter: blur(50px) !important;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(147, 197, 253, 0.10) 50%, transparent 70%) !important;
+    animation: none !important;
+}
+
+/* Sky-blue celestial tint for locked islands (matches distant background sky islands) */
+.island-node.is-locked .island-art::before {
+    display: none !important;
+}
+
+.island-node.is-locked .island-img {
+    filter: grayscale(1) sepia(0.38) hue-rotate(170deg) saturate(2.8) brightness(1.10) contrast(1.04) drop-shadow(0 12px 24px rgba(15, 23, 42, 0.20)) drop-shadow(0 4px 10px rgba(56, 189, 248, 0.25)) !important;
+    opacity: 0.90;
+    transition: filter .35s cubic-bezier(0.22, 1, 0.36, 1), opacity .35s ease, transform .35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.island-node.is-unlocked:hover .island-img {
+    filter: drop-shadow(0 24px 38px rgba(15, 23, 42, 0.30)) drop-shadow(0 6px 14px rgba(30, 58, 138, 0.18)) brightness(1.05);
+}
+
+.island-node.is-locked:hover .island-img {
+    filter: grayscale(1) sepia(0.38) hue-rotate(170deg) saturate(2.8) brightness(1.15) contrast(1.06) drop-shadow(0 18px 30px rgba(15, 23, 42, 0.22)) drop-shadow(0 6px 14px rgba(56, 189, 248, 0.32)) !important;
+    opacity: 1;
+}
+
+/* Boss placeholder */
+.boss-placeholder {
+    width: 140px;
+    height: 110px;
+    position: relative;
+    background: radial-gradient(circle, rgba(127, 29, 29, .75) 0%, rgba(20, 5, 10, .9) 80%);
+    border: 1px solid rgba(255, 77, 94, .40);
+    border-radius: 50% 50% 18% 18%;
+    box-shadow: 0 0 14px rgba(255, 77, 94, .35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow .3s ease;
+}
+
+.island-10:hover .boss-placeholder {
+    box-shadow: 0 0 24px rgba(255, 77, 94, .6), 0 0 45px rgba(255, 77, 94, .15);
+}
+
+.boss-crystal {
+    width: 28px;
+    height: 50px;
+    background: linear-gradient(180deg, #ff4d5e, #450a0a);
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    filter: drop-shadow(0 0 6px #ff4d5e);
+    transition: filter .3s ease;
+}
+
+.island-10:hover .boss-crystal {
+    filter: drop-shadow(0 0 10px #ff4d5e) drop-shadow(0 0 18px rgba(255, 77, 94, .5));
+}
+
+/* ══════════════════════════════════════════════════
+   AAA CYBER-FANTASY ISLAND NAMEPLATES (Exact Reference Specification)
+   ══════════════════════════════════════════════════ */
+.loc-card {
+    margin-top: -34px;
+    position: relative;
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: auto !important;
+    cursor: default !important;
+    transition: all .35s cubic-bezier(.16, 1, .3, 1);
+    filter: drop-shadow(0 6px 20px rgba(15, 23, 42, 0.45));
+}
+
+/* ══════════════════════════════════════════════════
+   SEPARATED FLOATING GLASS ISLAND NAME & STATUS PILLS
+   ══════════════════════════════════════════════════ */
+.island-plate-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    gap: 6px;
+    pointer-events: auto !important;
+    cursor: default !important;
+    user-select: none;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── 1. Independent Floating Island Name Capsule ── */
+.plate-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 5px 16px 5px 6px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.80) 0%, rgba(240, 248, 255, 0.58) 50%, rgba(225, 240, 255, 0.72) 100%);
+    backdrop-filter: blur(18px) saturate(190%);
+    -webkit-backdrop-filter: blur(18px) saturate(190%);
+    border: 1.2px solid rgba(255, 255, 255, 0.92);
+    border-radius: 999px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(0, 0, 0, 0.03), inset 0 1px 1px #ffffff, inset 0 -1px 2px rgba(147, 197, 253, 0.25);
+    transition: all .3s cubic-bezier(.16, 1, .3, 1);
+    white-space: nowrap;
+    pointer-events: auto !important;
+    cursor: default !important;
+}
+
+/* Crystal Round Numeral Crest */
+.plate-medallion {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0284c7 0%, #1e40af 100%);
+    border: 1.4px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    pointer-events: auto !important;
+    cursor: default !important;
+}
+
+/* Hide obsolete arrow ticks */
+.plate-medallion::before,
+.plate-medallion::after,
+.medallion-tick-left,
+.medallion-tick-right {
+    display: none !important;
+}
+
+/* Medallion Numeral */
+.medallion-num {
+    font-family: 'Rajdhani', 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Title Bar */
+.plate-title-bar {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    pointer-events: auto !important;
+    cursor: default !important;
+}
+
+.plate-title {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .10em;
+    color: #0f172a;
+    text-transform: uppercase;
+    white-space: nowrap;
+    line-height: 1;
+    text-shadow: none;
+    pointer-events: auto !important;
+    cursor: default !important;
+}
+
+/* ── 2. Independent Floating Chapter & Progress Capsule ── */
+@keyframes subPanelReveal {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.plate-sub-panel {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 14px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.70) 0%, rgba(240, 248, 255, 0.48) 100%);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1.1px solid rgba(255, 255, 255, 0.88);
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08), inset 0 1px 1px #ffffff;
+    animation: subPanelReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transition: all .3s ease;
+    white-space: nowrap;
+    pointer-events: auto !important;
+    cursor: default !important;
+}
+
+.plate-chapter-label {
+    display: none !important;
+}
+
+.plate-status-label {
+    font-family: 'Rajdhani', 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    color: #059669;
+    text-transform: uppercase;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-shadow: none;
+}
+
+.lock-mini-icon {
+    display: inline-block;
+    vertical-align: middle;
+    color: #ef4444;
+}
+
+/* ── Locked Chapter Plaque Styles ── */
+.island-plate-card.is-locked .plate-header {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(238, 244, 255, 0.45) 100%);
+    border-color: rgba(255, 255, 255, 0.80);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08), inset 0 1px 1px #ffffff;
+}
+
+.island-plate-card.is-locked .plate-medallion {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    border-color: rgba(255, 255, 255, 0.75);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+}
+
+.island-plate-card.is-locked .medallion-num {
+    color: #f1f5f9;
+}
+
+.island-plate-card.is-locked .plate-title {
+    color: #475569;
+}
+
+.island-plate-card.is-locked .plate-sub-panel {
+    background: rgba(241, 245, 249, 0.55);
+    border-color: rgba(203, 213, 225, 0.65);
+    padding: 3.5px 12px;
+}
+
+.island-plate-card.is-locked .plate-status-label {
+    color: #ef4444;
+    font-weight: 800;
+    font-size: 10.5px;
+    letter-spacing: .08em;
+}
+
+/* ── Individual Island Palette Mappings ── */
+/* Island 1: Pattern Observatory (Unlocked - Electric Cyan) */
+.island-1 {
+    --plate-color: #00e5ff;
+    --plate-glow: rgba(0, 229, 255, 0.55);
+    --plate-core: #0c355c;
+    --plate-bg-bar: rgba(6, 26, 52, 0.94);
+    --plate-sub-border: rgba(56, 189, 248, 0.5);
+    --plate-status: #7dd3fc;
+}
+
+/* Island 2: Logic Nexus (Violet / Purple) */
+.island-2 {
+    --plate-color: #c084fc;
+    --plate-glow: rgba(192, 132, 252, 0.45);
+    --plate-core: #2b1448;
+    --plate-bg-bar: rgba(26, 12, 48, 0.94);
+    --plate-sub-border: rgba(168, 85, 247, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 3: Programming District (Electric Blue) */
+.island-3 {
+    --plate-color: #60a5fa;
+    --plate-glow: rgba(96, 165, 250, 0.45);
+    --plate-core: #122854;
+    --plate-bg-bar: rgba(10, 24, 52, 0.94);
+    --plate-sub-border: rgba(59, 130, 246, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 4: Algorithm Forge (Flame Amber / Orange) */
+.island-4 {
+    --plate-color: #f59e0b;
+    --plate-glow: rgba(245, 158, 11, 0.45);
+    --plate-core: #381e07;
+    --plate-bg-bar: rgba(42, 20, 6, 0.94);
+    --plate-sub-border: rgba(245, 158, 11, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 5: Database Vault (Mint Emerald / Teal) */
+.island-5 {
+    --plate-color: #10b981;
+    --plate-glow: rgba(16, 185, 129, 0.45);
+    --plate-core: #083422;
+    --plate-bg-bar: rgba(6, 38, 26, 0.94);
+    --plate-sub-border: rgba(16, 185, 129, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 6: Network Grid (Cyan Arc) */
+.island-6 {
+    --plate-color: #06b6d4;
+    --plate-glow: rgba(6, 182, 212, 0.45);
+    --plate-core: #082d38;
+    --plate-bg-bar: rgba(6, 28, 44, 0.94);
+    --plate-sub-border: rgba(6, 182, 212, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 7: System Core (Solar Gold) */
+.island-7 {
+    --plate-color: #eab308;
+    --plate-glow: rgba(234, 179, 8, 0.45);
+    --plate-core: #362906;
+    --plate-bg-bar: rgba(40, 30, 6, 0.94);
+    --plate-sub-border: rgba(234, 179, 8, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 8: Communication Citadel (Indigo / Sapphire) */
+.island-8 {
+    --plate-color: #818cf8;
+    --plate-glow: rgba(129, 140, 248, 0.45);
+    --plate-core: #181546;
+    --plate-bg-bar: rgba(20, 16, 52, 0.94);
+    --plate-sub-border: rgba(129, 140, 248, 0.45);
+    --plate-status: #fca5a5;
+}
+
+/* Island 9: Placement Arena (Cosmic Magenta / Pink) */
+.island-9 {
+    --plate-color: #ec4899;
+    --plate-glow: rgba(236, 72, 153, 0.45);
+    --plate-core: #380e2a;
+    --plate-bg-bar: rgba(42, 10, 34, 0.94);
+    --plate-sub-border: rgba(236, 72, 153, 0.45);
+    --plate-status: #fca5a5;
+}
+
+
+/* ══════════════════════════════════════════════════
+   RIGHT DASHBOARD (Shifted Lower + Active Action Card)
+   ══════════════════════════════════════════════════ */
+.right-dash {
+    position: absolute;
+    right: 22px;
+    top: 84px;
+    z-index: 90;
+    width: 228px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(40px);
+}
+
+.game-viewport.stage-revealed .right-dash {
+    animation: rightDashSlideIn 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+    pointer-events: auto;
+}
+
+@keyframes rightDashSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(40px);
+        filter: blur(6px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0px);
+    }
+}
+
+/* ── Precision Cyber Chamfered Glass Cards (Ultra-Glassmorphism) ── */
+.cyber-spec-card {
+    position: relative;
+    /* Pure Frosted Translucent Glassmorphism */
+    background: rgba(6, 12, 30, 0.45);
+    backdrop-filter: blur(20px) saturate(190%) contrast(110%);
+    -webkit-backdrop-filter: blur(20px) saturate(190%) contrast(110%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    /* Exact chamfered polygon matching reference frame */
+    clip-path: polygon(11px 0,
+            calc(100% - 11px) 0,
+            100% 11px,
+            100% calc(100% - 11px),
+            calc(100% - 11px) 100%,
+            11px 100%,
+            0 calc(100% - 11px),
+            0 11px);
+    padding: 15px 14px 13px;
+    box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), inset 0 0 22px rgba(56, 189, 248, 0.10);
+    overflow: hidden;
+    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.cyber-spec-card:hover {
+    transform: translateY(-2px);
+    background: rgba(8, 16, 38, 0.60);
+    box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.45), 0 0 24px rgba(56, 189, 248, 0.20);
+    border-color: rgba(56, 189, 248, 0.40);
+}
+
+/* Holographic Diagonal Sheen Sweep */
+.holo-sheen {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg,
+            transparent 0%,
+            transparent 40%,
+            rgba(255, 255, 255, 0.08) 48%,
+            rgba(255, 255, 255, 0.18) 50%,
+            rgba(255, 255, 255, 0.08) 52%,
+            transparent 60%,
+            transparent 100%);
+    background-size: 200% 200%;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.75;
+    transition: opacity .3s ease;
+    animation: holoSheenMove 7s ease-in-out infinite;
+}
+
+.cyber-spec-card:hover .holo-sheen {
+    opacity: 1;
+    animation-duration: 3.5s;
+}
+
+@keyframes holoSheenMove {
+    0% {
+        background-position: 200% 0;
+    }
+
+    50% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* SVG Cyber Border & Metallic Corner Brackets Overlay */
+.card-frame-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Card Titles */
+.panel-title {
+    font-family: var(--font-tech);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .15em;
+    color: #93c5fd;
+    text-align: center;
+    margin-bottom: 8px;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.reward-title {
+    color: #fef08a;
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.6);
+}
+
+/* ── 1. Top Card: Daily Reward Spec ── */
+.card-reward {
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), inset 0 1.5px 0 rgba(255, 255, 255, 0.25), inset 0 0 24px rgba(245, 158, 11, 0.18);
+}
+
+.reward-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2px 0 4px;
+    min-height: 98px;
+}
+
+.reward-sunburst-rays {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    background: radial-gradient(circle, rgba(234, 179, 8, 0.55) 0%, rgba(202, 138, 4, 0.25) 45%, transparent 70%);
+    filter: blur(12px);
+    pointer-events: none;
+    z-index: 1;
+    animation: sunburstPulse 3.5s ease-in-out infinite alternate;
+}
+
+/* Ambient Golden Stardust Sparks */
+.reward-sparkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.sparkle {
+    position: absolute;
+    color: #fde047;
+    font-size: 10px;
+    line-height: 1;
+    text-shadow: 0 0 6px #facc15, 0 0 10px #eab308;
+    animation: sparkleFloat 3s ease-in-out infinite;
+    opacity: 0;
+}
+
+.sparkle.s1 {
+    top: 12px;
+    left: 24px;
+    font-size: 11px;
+    animation-delay: 0s;
+}
+
+.sparkle.s2 {
+    top: 22px;
+    right: 26px;
+    font-size: 8px;
+    animation-delay: 0.8s;
+}
+
+.sparkle.s3 {
+    bottom: 18px;
+    left: 32px;
+    font-size: 9px;
+    animation-delay: 1.6s;
+}
+
+.sparkle.s4 {
+    bottom: 14px;
+    right: 28px;
+    font-size: 12px;
+    animation-delay: 2.2s;
+}
+
+@keyframes sparkleFloat {
+    0% {
+        opacity: 0;
+        transform: translateY(4px) scale(0.6);
+    }
+
+    40% {
+        opacity: 0.95;
+        transform: translateY(-2px) scale(1.1);
+    }
+
+    80% {
+        opacity: 0.6;
+        transform: translateY(-8px) scale(0.85);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.4);
+    }
+}
+
+@keyframes sunburstPulse {
+    0% {
+        opacity: 0.45;
+        transform: scale(0.92);
+    }
+
+    100% {
+        opacity: 0.85;
+        transform: scale(1.12);
+    }
+}
+
+.reward-chest-img {
+    width: 104px;
+    height: 104px;
+    object-fit: contain;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 8px 18px rgba(15, 23, 42, 0.45)) drop-shadow(0 0 16px rgba(234, 179, 8, 0.55));
+    transition: transform .3s cubic-bezier(.16, 1, .3, 1), filter .3s ease;
+}
+
+.card-reward:hover .reward-chest-img {
+    transform: scale(1.05) translateY(-2px);
+    filter: drop-shadow(0 0 20px rgba(234, 179, 8, 0.85));
+}
+
+.reward-timer {
+    font-family: var(--font-tech);
+    font-size: 14.5px;
+    font-weight: 800;
+    letter-spacing: .15em;
+    color: #fef08a;
+    text-align: center;
+    margin: 3px 0 9px;
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.7);
+    line-height: 1;
+}
+
+.timer-colon {
+    display: inline-block;
+    color: #fde047;
+    margin: 0 1px;
+    animation: colonPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes colonPulse {
+    0% {
+        opacity: 0.35;
+        text-shadow: none;
+    }
+
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 8px rgba(250, 204, 21, 0.8);
+    }
+}
+
+/* ── 2. Bottom Card: Chapter Progress Radial Donut Ring ── */
+.progress-ring-wrap {
+    position: relative;
+    width: 104px;
+    height: 104px;
+    margin: 0 auto 8px;
+}
+
+.ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.ring-track {
+    stroke: rgba(30, 48, 95, 0.65);
+}
+
+.ring-bar {
+    stroke-linecap: round;
+    transition: stroke-dashoffset .8s ease;
+}
+
+.ring-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    line-height: 1;
+    pointer-events: none;
+}
+
+.ring-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(0, 229, 255, 0.5);
+}
+
+.ring-pct {
+    font-size: 16px;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-left: 2px;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+/* Progress Detail (Chapter 1 / Pattern Observatory) */
+.progress-detail {
+    text-align: center;
+    margin-bottom: 2px;
+    cursor: default;
+    padding: 2px 4px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.detail-badge {
+    font-family: var(--font-tech);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    color: #38bdf8;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.detail-name {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    color: #f0f9ff;
+    line-height: 1.25;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+/* Separator Hairline */
+.legend-sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.32) 50%, transparent 100%);
+    margin: 10px 4px 8px;
+}
+
+/* ══════════════════════════════════════════════════
+   THREEUI SHADERBUTTONS: INDUCTION BUTTON VARIANT (Raw WebGL)
+   ══════════════════════════════════════════════════ */
+.start-mission-btn.induction-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 46px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 0;
+    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+    overflow: hidden;
+    padding: 0;
+    margin-top: 4px;
+    transition: transform 0.22s cubic-bezier(0.34, 1.4, 0.5, 1), filter 0.22s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.start-mission-btn.induction-btn:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.45));
+}
+
+.start-mission-btn.induction-btn:active {
+    transform: translateY(1px) scale(0.98);
+}
+
+.start-mission-btn.induction-btn.is-locked {
+    opacity: 0.55;
+    filter: grayscale(0.7);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.induction-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 0;
+    clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 12px) 100%, 12px 100%, 0 calc(100% - 12px), 0 12px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.induction-label {
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+    font-family: 'Rajdhani', 'Cinzel', 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-indent: 0.25em;
+    color: #e0f7f8;
+    text-shadow: 0 0 12px rgba(0, 210, 255, 0.7), 0 1px 4px rgba(0, 0, 0, 0.9);
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+    user-select: none;
+}
+
+.start-mission-btn.induction-btn:hover .induction-label {
+    color: #ffffff;
+    text-shadow: 0 0 16px rgba(0, 240, 255, 0.95), 0 0 24px rgba(56, 189, 248, 0.85);
+}
+
+.cyber-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 35px;
+    position: relative;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+    font-family: 'Rajdhani', 'Cinzel', 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    transition: all .28s cubic-bezier(.16, 1, .3, 1);
+    z-index: 15;
+    padding: 0 12px;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Inner Surface: Radial Core with Dark Vignette Corners */
+.cyber-action-btn::before {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
+    z-index: 1;
+    transition: background .28s ease, filter .28s ease;
+    pointer-events: none;
+}
+
+/* Inner Bevel: Top Highlight Specular Reflection & Bottom Ambient Shadow */
+.cyber-action-btn::after {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    clip-path: polygon(7px 0, calc(100% - 7px) 0, 100% 7px, 100% calc(100% - 7px), calc(100% - 7px) 100%, 7px 100%, 0 calc(100% - 7px), 0 7px);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Button Text */
+.cyber-action-btn .btn-text {
+    position: relative;
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: color .2s ease, text-shadow .2s ease;
+}
+
+/* Button Glyphs & Icons */
+.cyber-action-btn .btn-icon {
+    position: relative;
+    z-index: 4;
+    font-size: 13px;
+    margin-right: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cyber-action-btn:hover .btn-icon {
+    transform: translateX(3px);
+}
+
+/* Button Laser Reflex Sweep on Hover */
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+    transform: skewX(-25deg);
+    pointer-events: none;
+    z-index: 3;
+    transition: left .65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-action-btn:hover .btn-shine {
+    left: 170%;
+}
+
+/* One-time Specular Sheen Sweep upon Entrance */
+.btn-entrance-flash {
+    position: absolute;
+    top: 0;
+    left: -140%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 25%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 255, 255, 0.3) 75%, transparent 100%);
+    transform: skewX(-25deg);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    animation: entranceFlashSweep 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) 1.2s 1 normal forwards;
+}
+
+@keyframes entranceFlashSweep {
+    0% {
+        left: -140%;
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 0.95;
+    }
+
+    100% {
+        left: 180%;
+        opacity: 0;
+    }
+}
+
+/* ── 1. CLAIM BUTTON (Exact Match with START Button Shade) ── */
+.btn-claim {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(245, 158, 11, 0.55) 30%, rgba(217, 119, 6, 0.65) 100%);
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(245, 158, 11, 0.35));
+    box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 0.35);
+}
+
+.btn-claim::before {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+.btn-claim::after {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(245, 158, 11, 0.08) 25%, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.btn-claim .btn-text {
+    color: #F5FAFF;
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.35), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.btn-claim:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(245, 158, 11, 0.8) 35%, rgba(217, 119, 6, 0.85) 100%);
+    filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(245, 158, 11, 0.55));
+    transform: translateY(-2px);
+}
+
+.btn-claim:hover::before {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.btn-claim:hover .btn-text {
+    color: #FFFFFF;
+    text-shadow: 0 0 14px rgba(245, 158, 11, 0.85), 0 1px 3px #000;
+}
+
+.btn-claim:active {
+    transform: translateY(1px) scale(0.985);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px rgba(245, 158, 11, 0.35));
+}
+
+/* Claimed State for Claim Button */
+.btn-claim.is-claimed {
+    background: linear-gradient(180deg, #86efac 0%, #16a34a 40%, #064e3b 100%);
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 14px rgba(34, 197, 94, 0.6));
+}
+
+.btn-claim.is-claimed::before {
+    background: radial-gradient(ellipse 85% 75% at 50% 35%, #15803d 0%, #0d4a23 50%, #021207 100%);
+}
+
+.btn-claim.is-claimed::after {
+    background: linear-gradient(180deg, rgba(167, 243, 208, 0.3) 0%, transparent 45%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.btn-claim.is-claimed .btn-text {
+    color: #bbf7d0;
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.8), 0 1px 2px #000;
+}
+
+/* ── 2. START MISSION BUTTON (Modern COREBOUND Cyan-to-Violet Theme) ── */
+.btn-start {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(0, 217, 255, 0.55) 30%, rgba(79, 70, 229, 0.65) 100%);
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 10px rgba(0, 217, 255, 0.35));
+    box-shadow: inset 0 1.5px 1px rgba(255, 255, 255, 0.35);
+}
+
+.btn-start::before {
+    background: linear-gradient(135deg, #087EA4 0%, #4F46E5 100%);
+}
+
+.btn-start::after {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(56, 189, 248, 0.08) 25%, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.btn-start .btn-text {
+    color: #F5FAFF;
+    text-shadow: 0 0 8px rgba(0, 207, 255, 0.35), 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.btn-start:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(0, 229, 255, 0.8) 35%, rgba(99, 102, 241, 0.85) 100%);
+    filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 16px rgba(0, 207, 255, 0.55));
+    transform: translateY(-2px);
+}
+
+.btn-start:hover::before {
+    background: linear-gradient(135deg, #0b93bf 0%, #5d55fa 100%);
+}
+
+.btn-start:hover .btn-text {
+    color: #FFFFFF;
+    text-shadow: 0 0 14px rgba(0, 207, 255, 0.85), 0 1px 3px #000;
+}
+
+.btn-start:active {
+    transform: translateY(1px) scale(0.985);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 10px rgba(0, 207, 255, 0.35));
+}
+
+/* Locked State for Start Button */
+.btn-start.is-locked {
+    background: linear-gradient(180deg, #991b1b 0%, #7f1d1d 50%, #450a0a 100%);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.8));
+    cursor: not-allowed;
+}
+
+.btn-start.is-locked::before {
+    background: radial-gradient(ellipse 85% 75% at 50% 35%, #581c1c 0%, #360f0f 50%, #170404 100%);
+}
+
+.btn-start.is-locked::after {
+    background: linear-gradient(180deg, rgba(252, 165, 165, 0.15) 0%, transparent 45%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+.btn-start.is-locked .btn-text {
+    color: #fca5a5;
+    text-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
+    opacity: 0.8;
+}
+
+.btn-start.is-locked:hover {
+    transform: none;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.8));
+}
+
+.btn-start.shake {
+    animation: lockShake 0.4s ease;
+}
+
+@keyframes lockShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   NOVA FIRST TRANSMISSION CENTER STAGE (Intro)
+   ══════════════════════════════════════════════════ */
+.nova-center-intro {
+    position: fixed;
+    inset: 0;
+    z-index: 180;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.65s ease;
+}
+
+.nova-center-intro.is-dismissed {
+    opacity: 0;
+    transform: scale(0.92) translateY(18px);
+    filter: blur(8px);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.nova-center-stage {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    animation: novaCenterEnter 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    pointer-events: auto;
+    max-width: 95vw;
+}
+
+@keyframes novaCenterEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(32px) scale(0.90);
+        filter: blur(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* Hologram Aura & Glow Rings */
+.nova-center-aura {
+    position: absolute;
+    top: 45%;
+    left: 42%;
+    transform: translate(-50%, -50%);
+    width: 540px;
+    height: 540px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.42) 0%, rgba(168, 85, 247, 0.22) 42%, transparent 70%);
+    filter: blur(36px);
+    pointer-events: none;
+    z-index: 1;
+    animation: novaAuraBreath 4s ease-in-out infinite alternate;
+}
+
+@keyframes novaAuraBreath {
+    0% { transform: translate(-50%, -50%) scale(0.92); opacity: 0.75; }
+    100% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+}
+
+/* Character Image Container (PROMINENT & HEROIC) */
+.nova-center-avatar-wrap {
+    position: relative;
+    width: clamp(280px, 32vw, 420px);
+    height: clamp(380px, 60vh, 520px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 3;
+    flex-shrink: 0;
+    animation: novaCharacterFloat 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes novaCharacterFloat {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(0.6deg); }
+    100% { transform: translateY(5px) rotate(-0.5deg); }
+}
+
+.nova-center-img {
+    width: auto;
+    height: 100%;
+    max-height: clamp(380px, 60vh, 520px);
+    object-fit: contain;
+    filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.80)) drop-shadow(0 0 32px rgba(56, 189, 248, 0.60));
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+/* Glowing Base Pedestal */
+.nova-center-pedestal {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 260px;
+    height: 24px;
+    background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.85) 0%, rgba(139, 92, 246, 0.40) 50%, transparent 75%);
+    border-radius: 50%;
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+/* Center Speech Bubble (Positioned Right of Nova) */
+.nova-center-bubble {
+    position: relative;
+    width: clamp(320px, 36vw, 450px);
+    background: linear-gradient(135deg, rgba(14, 24, 60, 0.94) 0%, rgba(20, 35, 85, 0.90) 100%);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1.5px solid rgba(56, 189, 248, 0.52);
+    border-radius: 18px;
+    padding: 18px 24px;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.55), 0 0 28px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    z-index: 4;
+    transition: all 0.3s ease;
+}
+
+.nova-center-bubble::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: -8px;
+    width: 15px;
+    height: 15px;
+    background: rgba(14, 24, 60, 0.94);
+    border-left: 1.5px solid rgba(56, 189, 248, 0.52);
+    border-bottom: 1.5px solid rgba(56, 189, 248, 0.52);
+    transform: rotate(45deg);
+    border-bottom-left-radius: 3px;
+}
+
+.nova-center-bubble-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+}
+
+.nova-center-header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nova-center-skip-btn {
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38bdf8;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    padding: 2.5px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.nova-center-skip-btn:hover {
+    background: rgba(56, 189, 248, 0.25);
+    border-color: rgba(56, 189, 248, 0.75);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    transform: translateY(-1px);
+}
+
+.nova-center-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nova-center-tag .nova-tag-beacon {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: beaconPulse 1.8s infinite alternate;
+}
+
+.nova-center-tag .nova-tag-name {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #38bdf8;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+.nova-center-tag .nova-tag-role {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+    background: rgba(56, 189, 248, 0.12);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 2px 7px;
+    border-radius: 4px;
+}
+
+.nova-center-dialogue-text {
+    margin: 0;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #f8fafc;
+    letter-spacing: 0.015em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    min-height: 52px;
+}
+
+@media (max-width: 820px) {
+    .nova-center-stage {
+        flex-direction: column;
+        gap: 14px;
+    }
+    .nova-center-avatar-wrap {
+        width: 220px;
+        height: 300px;
+    }
+    .nova-center-bubble {
+        width: 90vw;
+        max-width: 400px;
+    }
+    .nova-center-bubble::before {
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%) rotate(135deg);
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   NOVA INTERACTIVE VOICE BUBBLE (Bottom Left HUD)
+   ══════════════════════════════════════════════════ */
+.nova-voice-panel {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 100;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(32px) scale(0.94);
+}
+
+.game-viewport.stage-revealed .nova-voice-panel {
+    animation: novaPanelSlideUp 0.60s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
+    pointer-events: auto;
+}
+
+@keyframes novaPanelSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(32px) scale(0.94);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0px);
+    }
+}
+
+/* ── Nova Avatar 3D Pop-Out Beacon Pod ── */
+.nova-avatar-btn {
+    position: relative;
+    width: 78px;
+    height: 94px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    outline: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    transition: transform .35s cubic-bezier(.16, 1, .3, 1), filter .35s ease;
+    overflow: visible;
+}
+
+.nova-avatar-btn:hover {
+    transform: scale(1.08) translateY(-3px);
+}
+
+.nova-avatar-btn:active {
+    transform: scale(0.95);
+}
+
+/* Ambient Holographic Pod Aura */
+.nova-pod-aura {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.40) 0%, rgba(139, 92, 246, 0.20) 55%, transparent 75%);
+    filter: blur(14px);
+    opacity: 0.65;
+    pointer-events: none;
+    z-index: 0;
+    transition: all .4s ease;
+    animation: podAuraPulse 4s ease-in-out infinite alternate;
+}
+
+.nova-avatar-btn:hover .nova-pod-aura {
+    opacity: 0.95;
+    filter: blur(18px);
+    transform: translateX(-50%) scale(1.15);
+}
+
+.nova-voice-panel.speaking .nova-pod-aura {
+    opacity: 1;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.60) 0%, rgba(168, 85, 247, 0.35) 55%, transparent 80%);
+    filter: blur(18px);
+    animation: podVoiceSurge 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes podAuraPulse {
+    0% {
+        transform: translateX(-50%) scale(0.92);
+        opacity: 0.50;
+    }
+    100% {
+        transform: translateX(-50%) scale(1.08);
+        opacity: 0.75;
+    }
+}
+
+@keyframes podVoiceSurge {
+    0% {
+        transform: translateX(-50%) scale(0.95);
+        opacity: 0.75;
+    }
+    100% {
+        transform: translateX(-50%) scale(1.22);
+        opacity: 1;
+        filter: blur(22px);
+    }
+}
+
+/* Multi-Tone Holographic Orbit Ring */
+.nova-avatar-ring {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    padding: 2px;
+    background: conic-gradient(from 0deg, #00f0ff, #8b5cf6, #38bdf8, #c084fc, #00f0ff);
+    box-shadow: 0 0 16px rgba(0, 229, 255, 0.55), 0 0 30px rgba(139, 92, 246, 0.35), inset 0 0 10px rgba(0, 229, 255, 0.30);
+    z-index: 1;
+    animation: novaAvatarRingOrbit 9s linear infinite;
+}
+
+@keyframes novaAvatarRingOrbit {
+    from {
+        transform: translateX(-50%) rotate(0deg);
+    }
+    to {
+        transform: translateX(-50%) rotate(360deg);
+    }
+}
+
+.nova-voice-panel.speaking .nova-avatar-ring {
+    animation-duration: 4.5s;
+    box-shadow: 0 0 22px rgba(0, 240, 255, 0.80), 0 0 40px rgba(168, 85, 247, 0.50), inset 0 0 14px rgba(0, 240, 255, 0.45);
+}
+
+/* Base Capsule (Clips bottom smoothly inside the pod ring) */
+.nova-avatar-base {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 68%, #1c1348 0%, #080518 75%, #03020c 100%);
+    border: 2px solid rgba(0, 229, 255, 0.45);
+    z-index: 2;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.95), inset 0 0 14px rgba(0, 229, 255, 0.30), inset 0 2px 4px rgba(255, 255, 255, 0.25);
+}
+
+/* Specular Light Flare Reflection on Base Glass */
+.nova-avatar-base::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 12%;
+    width: 76%;
+    height: 38%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.03) 60%, transparent 100%);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+}
+
+/* Top Layer (Unclipped at the top so Nova's head and hair pop out) */
+.nova-avatar-top {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 74px;
+    height: 104px;
+    z-index: 3;
+    pointer-events: none;
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    background: transparent !important;
+}
+
+.nova-img {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%) scale(1.30);
+    transform-origin: bottom center;
+    width: 74px;
+    height: auto;
+    max-height: 104px;
+    object-fit: contain;
+    display: block;
+    background: transparent !important;
+    filter: contrast(1.06) brightness(1.06);
+    transition: transform .35s cubic-bezier(.16, 1, .3, 1);
+}
+
+.nova-avatar-top .nova-img {
+    filter: contrast(1.06) brightness(1.06);
+}
+
+.nova-avatar-btn:hover .nova-img {
+    transform: translateX(-50%) scale(1.34) translateY(-1px);
+}
+
+/* ── Live Quantum Status Beacon (With Radar Ping) ── */
+.nova-status-beacon {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 16px;
+    height: 16px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.beacon-core {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+    border: 2px solid #060416;
+    box-shadow: 0 0 8px #10b981, 0 0 16px rgba(16, 185, 129, 0.6);
+    z-index: 2;
+    transition: background .3s ease, box-shadow .3s ease;
+}
+
+.beacon-ping {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.40);
+    border: 1px solid #10b981;
+    animation: beaconRadarPing 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    z-index: 1;
+}
+
+@keyframes beaconRadarPing {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.9;
+    }
+    70% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
+
+.nova-voice-panel.speaking .beacon-core {
+    background: #00f0ff;
+    box-shadow: 0 0 10px #00f0ff, 0 0 20px rgba(0, 240, 255, 0.8);
+}
+
+.nova-voice-panel.speaking .beacon-ping {
+    background: rgba(0, 240, 255, 0.45);
+    border-color: #00f0ff;
+    animation-duration: 1.2s;
+}
+
+
+
+/* ══════════════════════════════════════════════════
+   ULTRA-PREMIUM CYBER GLASS SPEECH BUBBLE
+   ══════════════════════════════════════════════════ */
+.nova-bubble-wrap {
+    position: relative;
+    width: 320px;
+    background: linear-gradient(135deg, rgba(8, 16, 42, 0.92) 0%, rgba(15, 26, 62, 0.86) 55%, rgba(22, 16, 50, 0.90) 100%);
+    border: 1.2px solid rgba(56, 189, 248, 0.48);
+    border-radius: 16px;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    padding: 12px 16px;
+    box-shadow: 0 16px 42px rgba(3, 7, 22, 0.65), 
+                0 0 24px rgba(56, 189, 248, 0.16), 
+                inset 0 1px 1px rgba(255, 255, 255, 0.40), 
+                inset 0 0 16px rgba(139, 92, 246, 0.12);
+    transition: transform .38s cubic-bezier(.16, 1, .3, 1), opacity .35s ease, visibility .35s;
+    transform-origin: bottom left;
+    margin-bottom: 6px;
+}
+
+/* Top Neon Emitter Strip */
+.nova-bubble-emitter {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00f0ff 25%, #c084fc 75%, transparent);
+    margin: -12px -16px 10px -16px;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+/* Sleek Cyber Speech Tail */
+.nova-bubble-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: 22px;
+    left: -8px;
+    width: 14px;
+    height: 14px;
+    background: rgba(10, 18, 46, 0.95);
+    border-left: 1.2px solid rgba(56, 189, 248, 0.48);
+    border-bottom: 1.2px solid rgba(56, 189, 248, 0.48);
+    transform: rotate(45deg);
+    border-bottom-left-radius: 3px;
+    box-shadow: -3px 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Collapsed State (Ultra Smooth Spring Scale) */
+.nova-voice-panel.is-collapsed .nova-bubble-wrap {
+    opacity: 0;
+    transform: scale(0.65) translateX(-18px) translateY(8px);
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.nova-bubble-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.22);
+}
+
+.nova-id-tag {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.nova-tag-name {
+    font-family: var(--font-tech, 'Orbitron', monospace);
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+}
+
+.nova-tag-role {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 7.5px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    color: #c084fc;
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.20), rgba(99, 102, 241, 0.16));
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    text-transform: uppercase;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.20);
+}
+
+/* Audio-Reactive Equalizer Waveform */
+.nova-soundwave {
+    display: flex;
+    align-items: center;
+    gap: 2.5px;
+    height: 12px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.wave-bar {
+    width: 2.5px;
+    height: 3px;
+    background: linear-gradient(to top, #00f0ff 0%, #a855f7 100%);
+    border-radius: 2px;
+    transition: height .15s ease, opacity .2s ease;
+    opacity: 0.45;
+}
+
+.nova-voice-panel.speaking .wave-bar,
+.nova-soundwave.speaking .wave-bar,
+.nova-center-intro.speaking .wave-bar {
+    opacity: 1;
+    animation: wavePulse 0.75s ease-in-out infinite alternate;
+}
+
+.nova-voice-panel.speaking .wb1,
+.nova-soundwave.speaking .wb1,
+.nova-center-intro.speaking .wb1 {
+    height: 8px;
+    animation-delay: 0.08s;
+}
+
+.nova-voice-panel.speaking .wb2,
+.nova-soundwave.speaking .wb2,
+.nova-center-intro.speaking .wb2 {
+    height: 12px;
+    animation-delay: 0.25s;
+}
+
+.nova-voice-panel.speaking .wb3,
+.nova-soundwave.speaking .wb3,
+.nova-center-intro.speaking .wb3 {
+    height: 9px;
+    animation-delay: 0.15s;
+}
+
+.nova-voice-panel.speaking .wb4,
+.nova-soundwave.speaking .wb4,
+.nova-center-intro.speaking .wb4 {
+    height: 13px;
+    animation-delay: 0.35s;
+}
+
+.nova-voice-panel.speaking .wb5,
+.nova-soundwave.speaking .wb5,
+.nova-center-intro.speaking .wb5 {
+    height: 7px;
+    animation-delay: 0.12s;
+}
+
+@keyframes wavePulse {
+    0% {
+        transform: scaleY(0.35);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scaleY(1.25);
+        opacity: 1;
+        filter: drop-shadow(0 0 6px #00f0ff);
+    }
+}
+
+/* Action Buttons (Frosted Cyber Glass Chips) */
+.nova-bubble-actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nova-action-btn {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 6px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.16, 1, .3, 1);
+    padding: 0;
+}
+
+.nova-action-btn:hover {
+    background: rgba(0, 229, 255, 0.20);
+    border-color: rgba(0, 229, 255, 0.70);
+    color: #ffffff;
+    transform: translateY(-1.5px) scale(1.08);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.50);
+}
+
+.nova-action-btn:active {
+    transform: scale(0.92);
+}
+
+.nova-bubble-body {
+    position: relative;
+}
+
+.nova-dialogue {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 11px;
+    line-height: 1.55;
+    color: #e2e8f0;
+    font-weight: 500;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+.nova-dialogue.updating {
+    opacity: 0;
+    transform: translateY(3px);
+}
+
+/* ══════════════════════════════════════════════════
+   HIGH-PERFORMANCE HARDWARE-ACCELERATED IGNITION
+   ══════════════════════════════════════════════════ */
+.ignition-flash-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, rgba(0, 229, 255, 0.16) 0%, rgba(139, 92, 246, 0.10) 50%, transparent 75%);
+    pointer-events: none;
+    z-index: 80;
+    opacity: 0;
+    will-change: opacity;
+    transition: opacity .45s ease-out;
+}
+
+.ignition-flash-overlay.active {
+    opacity: 1;
+    transition: none;
+}
+
+/* Island Node Smooth Hardware-Accelerated Bloom */
+.island-node .island-art {
+    will-change: transform;
+    transition: transform .4s cubic-bezier(.16, 1, .3, 1), filter .4s ease;
+}
+
+.island-node.is-ignited .island-art {
+    filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.6)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+}
+
+.island-node .island-aura {
+    will-change: transform, opacity;
+    transition: transform .45s cubic-bezier(.16, 1, .3, 1), opacity .45s ease;
+}
+
+.island-node.is-ignited .island-aura {
+    opacity: 0.75;
+    transform: scale(1.25);
+}
+
+/* Ignition Sparks Canvas */
+.ignition-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 45;
+    pointer-events: none;
+    will-change: transform;
+}
+
+/* Soft Conduits Luminous Surge */
+.energy-link.link-surge .layer-lightning-core {
+    animation: softSurgeLightning .9s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.energy-link.link-surge .layer-electric-bolt {
+    animation: softSurgeBolt .9s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.energy-link.link-surge .layer-branch {
+    animation: softSurgeBranch .9s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes softSurgeLightning {
+    0% {
+        stroke-width: 5.0;
+        stroke: #ffffff;
+        filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 18px #00e5ff);
+    }
+
+    50% {
+        stroke-width: 3.5;
+        stroke: #38bdf8;
+    }
+
+    100% {
+        stroke-width: 2.2;
+    }
+}
+
+@keyframes softSurgeBolt {
+    0% {
+        stroke-width: 3.8;
+        stroke: #ffffff;
+    }
+
+    100% {
+        stroke-width: 2.4;
+    }
+}
+
+@keyframes softSurgeBranch {
+    0% {
+        stroke-width: 3.0;
+        stroke: #ffffff;
+        filter: drop-shadow(0 0 10px #00e5ff);
+    }
+
+    50% {
+        stroke-width: 2.0;
+        stroke: #67e8f9;
+    }
+
+    100% {
+        stroke-width: 1.4;
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════ */
+@media(max-width:1400px) {
+    .right-dash {
+        width: 176px;
+        right: 14px;
+        top: 118px;
+        gap: 8px;
+    }
+
+    .nova-panel {
+        left: 60px;
+        bottom: 12px;
+        width: 240px;
+    }
+
+    .island-img {
+        width: 185px;
+    }
+
+    .island-1 .island-img {
+        width: 360px;
+    }
+
+    .island-1 .island-aura {
+        width: 400px;
+        height: 400px;
+    }
+
+    .island-aura {
+        width: 220px;
+        height: 220px;
+    }
+
+    .loc-card {
+        margin-top: -24px;
+    }
+
+    .island-plate-card {
+        min-width: 170px;
+        max-width: 220px;
+    }
+
+    .plate-medallion {
+        width: 31px;
+        height: 31px;
+    }
+
+    .medallion-num {
+        font-size: 15px;
+    }
+
+    .plate-title-bar {
+        padding: 3px 10px 3px 14px;
+    }
+
+    .plate-title {
+        font-size: 11px;
+    }
+
+    .plate-sub-panel {
+        padding: 2px 10px 2px 14px;
+    }
+
+    .plate-chapter-label {
+        font-size: 10px;
+    }
+
+    .plate-status-label {
+        font-size: 9px;
+    }
+
+    .hud-currency-group {
+        height: 35px;
+        padding: 0 12px 0 14px;
+    }
+
+    .curr-val {
+        font-size: 13.5px;
+    }
+
+    .curr-divider {
+        margin: 0 9px;
+    }
+
+    .profile-avatar-crest {
+        width: 56px;
+        height: 56px;
+        margin: 0 -11px;
+    }
+
+    .hud-profile-pod {
+        height: 46px;
+        padding: 0 14px 0 20px;
+    }
+
+    .profile-details {
+        min-width: 125px;
+    }
+
+    .profile-progress-track {
+        width: 115px;
+    }
+
+    .profile-role {
+        font-size: 11.5px;
+    }
+
+    .profile-level {
+        font-size: 10px;
+    }
+}
+
+@media(max-width:1024px) {
+    .right-dash {
+        display: none;
+    }
+
+    .nova-panel {
+        left: 60px;
+        width: 220px;
+    }
+
+    .island-img {
+        width: 150px;
+    }
+
+    .island-aura {
+        width: 180px;
+        height: 180px;
+    }
+
+    .loc-card {
+        margin-top: -20px;
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   REDUCED MOTION
+   ══════════════════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce) {
+
+    .cosmos-background,
+    .nebula-1,
+    .nebula-2,
+    .nebula-3,
+    .stars-canvas,
+    .top-hud,
+    .compact-dock,
+    .energy-conduits,
+    .island-node,
+    .island-aura,
+    .right-dash,
+    .nova-panel,
+    .nova-dialogue,
+    .enter-chapter-card,
+    .enter-card-thumb-wrap,
+    .enter-card-thumb-img,
+    .bar,
+    .flow-fast-1,
+    .flow-fast-2,
+    .flow-fast-3,
+    .spark-flow-1,
+    .spark-flow-2,
+    .spark-flow-3,
+    .layer-lightning-core,
+    .layer-corona,
+    .ring-bar,
+    .reward-glow {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+    }
+
+    .island-node {
+        transition: none;
+    }
+
+    .island-aura {
+        transition: none;
+    }
+
+    .loc-card,
+    .loc-badge,
+    .loc-name {
+        transition: none;
+    }
+
+    .energy-link,
+    .layer-corona,
+    .layer-lightning-core,
+    .layer-electric-bolt {
+        transition: none;
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   CYBERPUNK SETTINGS MODAL
+   ══════════════════════════════════════════════════ */
+.settings-modal-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(3, 2, 12, 0.70);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity .35s cubic-bezier(.16, 1, .3, 1), visibility .35s;
+}
+
+.settings-modal-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.settings-card {
+    width: 90%;
+    max-width: 440px;
+    background: linear-gradient(135deg, rgba(14, 24, 60, 0.88) 0%, rgba(18, 30, 75, 0.85) 100%);
+    border: 1.5px solid rgba(168, 85, 247, 0.45);
+    border-radius: 20px;
+    padding: 24px 26px;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.40), 0 0 25px rgba(139, 92, 246, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transform: scale(0.92) translateY(12px);
+    transition: transform .38s cubic-bezier(.16, 1, .3, 1);
+}
+
+.settings-modal-overlay.is-open .settings-card {
+    transform: scale(1) translateY(0);
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    margin-bottom: 20px;
+}
+
+.settings-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.20);
+}
+
+.settings-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.45);
+    margin: 0;
+}
+
+.settings-close-btn {
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s ease;
+    outline: none;
+}
+
+.settings-close-btn:hover {
+    background: rgba(255, 77, 94, 0.25);
+    border-color: rgba(255, 77, 94, 0.6);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 77, 94, 0.5);
+    transform: rotate(90deg);
+}
+
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(14, 10, 36, 0.6);
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    border-radius: 14px;
+    padding: 14px 18px;
+    transition: border-color .25s ease, background .25s ease;
+}
+
+.setting-item:hover {
+    background: rgba(18, 14, 46, 0.75);
+    border-color: rgba(0, 229, 255, 0.35);
+}
+
+.setting-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.setting-label {
+    font-family: var(--font-tech);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: var(--text-primary);
+}
+
+.setting-sub {
+    font-family: var(--font-tech);
+    font-size: 9.5px;
+    color: var(--text-muted);
+    letter-spacing: .04em;
+}
+
+/* ── Cyber Toggle Switch ── */
+.cyber-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.cyber-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: rgba(30, 24, 56, 0.8);
+    border: 1px solid rgba(139, 92, 246, 0.30);
+    transition: .3s cubic-bezier(.16, 1, .3, 1);
+    border-radius: 99px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #94a3b8;
+    transition: .3s cubic-bezier(.16, 1, .3, 1);
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.cyber-toggle input:checked+.toggle-slider {
+    background: linear-gradient(135deg, #8b5cf6, #00e5ff);
+    border-color: #00e5ff;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.45);
+}
+
+.cyber-toggle input:checked+.toggle-slider:before {
+    transform: translateX(20px);
+    background-color: #ffffff;
+    box-shadow: 0 0 6px #ffffff;
+}
+
+/* ==========================================================================
+   MINIMAL CHAPTER LOADING OVERLAY
+   ========================================================================== */
+.chapter-loading-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, rgba(3, 2, 14, 0.55) 0%, rgba(3, 2, 12, 0.88) 100%),
+        url('assets/images/ch_bg/ch1_bg.png') center/cover no-repeat;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+.chapter-loading-overlay.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.loading-minimal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 340px;
+    max-width: 90vw;
+    padding: 28px 24px 22px;
+    background: rgba(6, 4, 18, 0.65);
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 30px rgba(0, 229, 255, 0.10);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: minimalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes minimalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loading-minimal-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.minimal-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.4));
+    animation: minimalPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes minimalPulse {
+    0% {
+        transform: scale(0.96);
+        opacity: 0.85;
+    }
+
+    100% {
+        transform: scale(1.04);
+        opacity: 1;
+    }
+}
+
+.loading-minimal-info {
+    margin-bottom: 24px;
+}
+
+.minimal-sub {
+    font-family: var(--font-tech);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: #a78bfa;
+    display: block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.minimal-title {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 0;
+    text-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+}
+
+.loading-minimal-bar {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.loading-minimal-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #8b5cf6 0%, #00e5ff 100%);
+    box-shadow: 0 0 8px #00e5ff;
+    transition: width 0.05s linear;
+}
+
+.loading-minimal-status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-tech);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+}
+
+.minimal-status-text {
+    color: rgba(203, 213, 225, 0.6);
+    text-transform: uppercase;
+}
+
+.minimal-pct-text {
+    color: #00e5ff;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   GUARDIAN DOSSIER MODAL (Cyber-Fantasy Hero Profile)
+   ========================================================================== */
+.guardian-modal-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 16, 38, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity .35s cubic-bezier(.16, 1, .3, 1), visibility .35s;
+}
+
+.guardian-modal-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+.guardian-modal-card {
+    position: relative;
+    width: 92%;
+    max-width: 760px;
+    background: linear-gradient(135deg, rgba(14, 24, 60, 0.90) 0%, rgba(18, 30, 75, 0.88) 100%);
+    border: 1.5px solid rgba(168, 85, 247, 0.45);
+    border-radius: 24px;
+    padding: 32px 34px;
+    box-shadow: 0 25px 70px rgba(15, 23, 42, 0.45), 0 0 35px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: scale(0.92) translateY(14px);
+    transition: transform .38s cubic-bezier(.16, 1, .3, 1);
+    overflow: hidden;
+}
+
+.guardian-modal-overlay.is-open .guardian-modal-card {
+    transform: scale(1) translateY(0);
+}
+
+.guardian-modal-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all .2s ease;
+    outline: none;
+    z-index: 10;
+}
+
+.guardian-modal-close-btn:hover {
+    background: rgba(255, 77, 94, 0.25);
+    border-color: rgba(255, 77, 94, 0.6);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 77, 94, 0.5);
+    transform: rotate(90deg);
+}
+
+.guardian-modal-grid {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 28px;
+    align-items: center;
+}
+
+/* Left: Portrait */
+.guardian-visual-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.guardian-portrait-frame {
+    position: relative;
+    width: 220px;
+    height: 270px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid rgba(139, 92, 246, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(139, 92, 246, 0.3);
+    background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.25), #060515);
+}
+
+.portrait-glow-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    border: 1px solid rgba(0, 229, 255, 0.35);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.guardian-portrait-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 18%;
+    transform: scale(1.05);
+    transition: transform .4s ease;
+}
+
+.guardian-portrait-frame:hover .guardian-portrait-img {
+    transform: scale(1.1);
+}
+
+.guardian-rank-tag {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 6px 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(9, 6, 26, 0.95) 40%, rgba(9, 6, 26, 1) 100%);
+    text-align: center;
+    font-family: var(--font-tech);
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    color: #00e5ff;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.7);
+    z-index: 3;
+}
+
+.guardian-badges-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+}
+
+.g-badge-chip {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.35);
+    font-family: var(--font-tech);
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    color: #e2e8f0;
+}
+
+/* Right: Info Col */
+.guardian-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.guardian-meta-tag {
+    font-family: var(--font-tech);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .22em;
+    color: #a78bfa;
+    margin-bottom: 4px;
+}
+
+.guardian-title-text {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: .10em;
+    color: #ffffff;
+    line-height: 1;
+    text-shadow: 0 0 16px rgba(139, 92, 246, 0.4);
+    margin: 0;
+}
+
+.guardian-role-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    line-height: 1.45;
+    color: #94a3b8;
+    margin: 6px 0 0 0;
+}
+
+/* Level & XP Card */
+.guardian-xp-card {
+    background: rgba(14, 10, 36, 0.65);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: 14px;
+    padding: 12px 16px;
+}
+
+.xp-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.xp-level-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    color: #ffffff;
+    background: rgba(139, 92, 246, 0.35);
+    border: 1px solid rgba(167, 139, 250, 0.4);
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.xp-ratio-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.xp-card-bar-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.10);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.xp-card-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #9333ea 0%, #c084fc 100%);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.7);
+}
+
+.xp-card-footnote {
+    font-family: 'Inter', sans-serif;
+    font-size: 8.5px;
+    color: #64748b;
+    margin-top: 5px;
+}
+
+/* Stats Grid */
+.guardian-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.stat-card {
+    background: rgba(14, 10, 36, 0.5);
+    border: 1px solid rgba(139, 92, 246, 0.18);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition: border-color .2s;
+}
+
+.stat-card:hover {
+    border-color: rgba(0, 229, 255, 0.4);
+}
+
+.stat-label {
+    font-family: var(--font-tech);
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+}
+
+.stat-value-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.stat-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.stat-val.heart-color {
+    color: #f87171;
+    text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+.stat-val.cyan-color {
+    color: #38bdf8;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.stat-val.violet-color {
+    color: #c084fc;
+    text-shadow: 0 0 8px rgba(192, 132, 252, 0.4);
+}
+
+.stat-val.gold-color {
+    color: #fde047;
+    text-shadow: 0 0 8px rgba(253, 224, 71, 0.4);
+}
+
+.stat-sub {
+    font-family: var(--font-tech);
+    font-size: 8px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: .06em;
+}
+
+/* Dossier Box */
+.guardian-dossier-box {
+    background: rgba(8, 6, 22, 0.6);
+    border-left: 3px solid #8b5cf6;
+    border-radius: 0 10px 10px 0;
+    padding: 10px 14px;
+}
+
+.dossier-heading {
+    font-family: var(--font-tech);
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    color: #a78bfa;
+    margin-bottom: 3px;
+}
+
+.dossier-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5px;
+    line-height: 1.45;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .guardian-modal-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .guardian-portrait-frame {
+        width: 150px;
+        height: 180px;
+    }
+
+    .guardian-modal-card {
+        padding: 22px 18px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* ══════════════════════════════════════════════════
+   SETTINGS MODAL (Ultra-Glassmorphism Frost Card)
+   ══════════════════════════════════════════════════ */
+.settings-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(3, 7, 22, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.settings-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.settings-card {
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    background: rgba(10, 20, 44, 0.82);
+    backdrop-filter: blur(32px) saturate(210%) brightness(110%);
+    -webkit-backdrop-filter: blur(32px) saturate(210%) brightness(110%);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-top: 1.5px solid rgba(56, 189, 248, 0.45);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), inset 0 1.5px 0 rgba(255, 255, 255, 0.35), 0 0 30px rgba(56, 189, 248, 0.20);
+    transform: scale(0.92) translateY(12px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.settings-modal-overlay.active .settings-card {
+    transform: scale(1) translateY(0);
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.settings-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.settings-title {
+    font-family: 'Rajdhani', 'Cinzel', 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: #f1f5f9;
+    margin: 0;
+    text-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+.settings-close-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: #cbd5e1;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.settings-close-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+    transform: scale(1.08);
+}
+
+.settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.setting-item:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.setting-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.setting-label {
+    font-family: 'Rajdhani', 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+}
+
+.setting-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+/* Cyber Toggle Switch */
+.cyber-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.cyber-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 24px;
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: #94a3b8;
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.cyber-toggle input:checked + .toggle-slider {
+    background: #38bdf8;
+    border-color: #38bdf8;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+.cyber-toggle input:checked + .toggle-slider:before {
+    transform: translateX(20px);
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+}

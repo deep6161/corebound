@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact Topbar Replica Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #060513 url('assets/images/background.png') no-repeat center top;
+            background-size: cover;
+            min-height: 100vh;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            padding: 30px;
+        }
+
+        /* Top HUD Bar */
+        .top-hud {
+            position: relative;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        /* --- 1. BRAND (Left) --- */
+        .hud-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        .brand-crest-box {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .brand-crest-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6));
+            transition: transform 0.3s cubic-bezier(.16, 1, .3, 1), filter 0.3s ease;
+        }
+        .hud-brand:hover .brand-crest-img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.95)) drop-shadow(0 0 24px rgba(0, 229, 255, 0.4));
+        }
+        .brand-text-block {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .brand-title {
+            font-family: 'Rajdhani', 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            line-height: 1;
+            color: #f1f5f9;
+            text-shadow: 0 0 12px rgba(148, 163, 184, 0.3);
+        }
+        .brand-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 8.5px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            color: #94a3b8;
+            line-height: 1;
+        }
+        /* Bottom Tech Bracket Underline */
+        .brand-tech-bracket {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 240px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.5) 0%, rgba(56, 189, 248, 0.15) 70%, transparent 100%);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+        }
+        .brand-tech-bracket::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: -2px;
+            width: 4px;
+            height: 6px;
+            border-left: 2px solid #38bdf8;
+            border-top: 2px solid #38bdf8;
+        }
+
+        /* --- Right Group (Currencies + Profile) --- */
+        .hud-right-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* --- 2. CURRENCY CAPSULE --- */
+        .hud-currency-capsule {
+            position: relative;
+            background: rgba(9, 12, 28, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(56, 189, 248, 0.28);
+            border-radius: 4px;
+            clip-path: polygon(
+                9px 0, 
+                calc(100% - 9px) 0, 
+                100% 9px, 
+                100% calc(100% - 9px), 
+                calc(100% - 9px) 100%, 
+                9px 100%, 
+                0 calc(100% - 9px), 
+                0 9px
+            );
+            height: 42px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+        /* Corner Accent Brackets for Currency Capsule */
+        .hud-currency-capsule::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-left: 2px solid rgba(56, 189, 248, 0.5);
+            border-right: 2px solid rgba(56, 189, 248, 0.5);
+        }
+
+        .curr-pill {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            cursor: default;
+        }
+
+        /* XP Badge */
+        .xp-badge {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+            border: 1.5px solid #c084fc;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9.5px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+        }
+        .curr-val.xp-val {
+            color: #d8b4fe;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+        }
+
+        .curr-divider {
+            width: 1px;
+            height: 18px;
+            background: rgba(255, 255, 255, 0.12);
+            margin: 0 14px;
+        }
+
+        /* Gold Coin */
+        .curr-val.coin-val {
+            color: #fef08a;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 8px rgba(234, 179, 8, 0.4);
+        }
+
+        /* Diamond */
+        .curr-val.shard-val {
+            color: #38bdf8;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.45);
+        }
+
+        /* Heart / Energy */
+        .curr-val.heart-val {
+            color: #f87171;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 8px rgba(239, 68, 68, 0.45);
+        }
+
+        /* Plus Button */
+        .curr-plus-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.2s ease;
+            outline: none;
+            line-height: 1;
+        }
+        .curr-plus-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* --- 3. GUARDIAN PROFILE CAPSULE --- */
+        .hud-profile-capsule {
+            position: relative;
+            background: rgba(9, 12, 28, 0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(99, 102, 241, 0.32);
+            border-radius: 4px;
+            clip-path: polygon(
+                10px 0, 
+                calc(100% - 10px) 0, 
+                100% 10px, 
+                100% calc(100% - 10px), 
+                calc(100% - 10px) 100%, 
+                10px 100%, 
+                0 calc(100% - 10px), 
+                0 10px
+            );
+            height: 50px;
+            padding: 4px 14px 4px 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .profile-avatar-frame {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #475569;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #0f172a;
+        }
+        .profile-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
+            transform: scale(1.18);
+        }
+
+        .profile-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 140px;
+        }
+        .profile-role {
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 11.5px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #f8fafc;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+        .profile-level {
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: #38bdf8;
+            line-height: 1.2;
+            margin-top: 2px;
+        }
+        .profile-progress-track {
+            width: 140px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 999px;
+            margin-top: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .profile-progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #9333ea 0%, #c084fc 100%);
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.7);
+        }
+
+        /* Scan / Viewfinder Action button */
+        .profile-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s;
+            margin-left: 4px;
+        }
+        .profile-action-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+            color: #fff;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Comparison Image Preview */
+        .comparison-box {
+            margin-top: 40px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+        .comparison-box h3 {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        .comparison-box img {
+            max-width: 100%;
+            border: 1px solid #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="font-size: 14px; color: #94a3b8; margin-bottom: 12px; letter-spacing: 0.1em; text-transform: uppercase;">Live Replicated Top Bar</h2>
+
+    <header class="top-hud">
+        <!-- Left: Brand Island -->
+        <div class="hud-brand">
+            <div class="brand-crest-box">
+                <img src="assets/images/corebound_logo.png" alt="COREBOUND Logo" class="brand-crest-img">
+            </div>
+            <div class="brand-text-block">
+                <h1 class="brand-title">COREBOUND</h1>
+                <span class="brand-subtitle">YOUR QUEST. YOUR FUTURE.</span>
+            </div>
+            <div class="brand-tech-bracket"></div>
+        </div>
+
+        <!-- Right Side: Currency Capsule + Profile Capsule -->
+        <div class="hud-right-group">
+            <!-- Currency Capsule -->
+            <div class="hud-currency-capsule">
+                <!-- XP -->
+                <div class="curr-pill" title="Experience">
+                    <div class="curr-badge xp-badge">XP</div>
+                    <span class="curr-val xp-val">2,450</span>
+                </div>
+
+                <div class="curr-divider"></div>
+
+                <!-- Gold Coins -->
+                <div class="curr-pill" title="Credits">
+                    <div class="curr-icon coin-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="20">
+                            <defs>
+                                <linearGradient id="goldCoinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#fef08a" />
+                                    <stop offset="50%" stop-color="#eab308" />
+                                    <stop offset="100%" stop-color="#ca8a04" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="12" cy="12" r="10" fill="url(#goldCoinGrad)" stroke="#fef9c3" stroke-width="1.2" />
+                            <path d="M7.5 7.5 L16.5 16.5 M16.5 7.5 L7.5 16.5" stroke="#78350f" stroke-width="1.8" stroke-linecap="round" />
+                            <circle cx="12" cy="12" r="2.8" fill="#ca8a04" stroke="#fef08a" stroke-width="0.8" />
+                        </svg>
+                    </div>
+                    <span class="curr-val coin-val">1,280</span>
+                </div>
+
+                <div class="curr-divider"></div>
+
+                <!-- Shards / Diamonds -->
+                <div class="curr-pill" title="Aether Shards">
+                    <div class="curr-icon diamond-icon">
+                        <svg viewBox="0 0 24 24" width="20" height="18">
+                            <defs>
+                                <linearGradient id="cyanDiamondGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#7dd3fc" />
+                                    <stop offset="60%" stop-color="#0284c7" />
+                                    <stop offset="100%" stop-color="#0369a1" />
+                                </linearGradient>
+                            </defs>
+                            <polygon points="12,2 21,7.5 12,22 3,7.5" fill="url(#cyanDiamondGrad)" stroke="#bae6fd" stroke-width="1" />
+                            <polygon points="12,2 17,7.5 12,13 7,7.5" fill="#e0f2fe" opacity="0.9" />
+                            <polygon points="12,2 21,7.5 17,7.5" fill="#bae6fd" opacity="0.8" />
+                            <polygon points="12,2 3,7.5 7,7.5" fill="#93c5fd" opacity="0.8" />
+                            <polygon points="17,7.5 21,7.5 12,22" fill="#0284c7" opacity="0.7" />
+                            <polygon points="7,7.5 3,7.5 12,22" fill="#075985" opacity="0.9" />
+                        </svg>
+                    </div>
+                    <span class="curr-val shard-val">42</span>
+                </div>
+
+                <div class="curr-divider"></div>
+
+                <!-- Energy / Hearts -->
+                <div class="curr-pill energy-pill" title="Guardian Energy">
+                    <div class="curr-icon heart-icon">
+                        <svg viewBox="0 0 24 24" width="18" height="18">
+                            <defs>
+                                <linearGradient id="redHeartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#f87171" />
+                                    <stop offset="100%" stop-color="#dc2626" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#redHeartGrad)" filter="drop-shadow(0 0 5px rgba(239, 68, 68, 0.6))" />
+                        </svg>
+                    </div>
+                    <span class="curr-val heart-val">5/5</span>
+                    <button class="curr-plus-btn" id="btnRefillEnergy" type="button" aria-label="Refill Energy" title="Refill Energy">+</button>
+                </div>
+            </div>
+
+            <!-- Guardian Profile Capsule -->
+            <div class="hud-profile-capsule">
+                <div class="profile-avatar-frame">
+                    <img src="assets/images/characters/guardian.png" alt="Corebound Guardian" class="profile-avatar-img" onerror="this.src='assets/images/characters/blaze_avatar.png';">
+                </div>
+                <div class="profile-details">
+                    <div class="profile-role">COREBOUND GUARDIAN</div>
+                    <div class="profile-level">LEVEL 12</div>
+                    <div class="profile-progress-track">
+                        <div class="profile-progress-bar" style="width: 72%;"></div>
+                    </div>
+                </div>
+                <button class="profile-action-btn" id="hudSettingsBtn" type="button" title="View Profile">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 0h-4m4 0l-5-5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="comparison-box">
+        <h3>User's Reference Image (Target Design):</h3>
+        <img src="C:/Users/rkman/.gemini/antigravity-ide/brain/e4b74186-dcfe-4a05-856f-02f80b476020/.user_uploaded/media_1788241342931.png" alt="Reference Topbar">
+    </div>
+
+</body>
+</html>

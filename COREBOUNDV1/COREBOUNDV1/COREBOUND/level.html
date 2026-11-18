@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>COREBOUND — World Map</title>
+
+    <!-- Universal Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="theme-tokens.css">
+    <link rel="stylesheet" href="auth-calibration.css">
+    <link rel="stylesheet" href="level.css">
+    <script defer src="corebound-api.js"></script>
+    <script defer src="auth-calibration.js"></script>
+</head>
+
+<body>
+    <div class="game-viewport">
+
+        <!-- ==========================================
+             BACKGROUND LAYERS
+             ========================================== -->
+        <div class="cosmos-background">
+            <div class="nebula-layer nebula-1"></div>
+            <div class="nebula-layer nebula-2"></div>
+            <div class="nebula-layer nebula-3"></div>
+            <!-- Celestial Solar Wind & Aurora Wave Curtains -->
+            <div class="solar-aurora-curtain aurora-wave-primary"></div>
+            <div class="solar-aurora-curtain aurora-wave-secondary"></div>
+            <canvas id="starsCanvas" class="stars-canvas"></canvas>
+            <div class="cosmic-vignette"></div>
+            <div class="ignition-flash-overlay" id="ignFlashOverlay"></div>
+        </div>
+
+        <!-- ==========================================
+             TOP HUD BAR
+             ========================================== -->
+        <!-- ==========================================
+             TOP HUD BAR (AAA Cyber-Fantasy Glass Bar)
+             ========================================== -->
+        <!-- ==========================================
+             TOP HUD BAR (Exact Sci-Fi Cyber Glass Bar)
+             ========================================== -->
+        <header class="top-hud">
+            <!-- Left: Brand Plaque -->
+            <div class="hud-brand">
+                <div class="brand-crest-box">
+                    <img src="assets/images/corebound_logo.png" alt="COREBOUND Logo" class="brand-crest-img">
+                </div>
+                <div class="brand-text-block">
+                    <h1 class="brand-title">COREBOUND</h1>
+                    <span class="brand-subtitle">THE JOURNEY BEGINS</span>
+                </div>
+                <div class="brand-tech-bracket"></div>
+            </div>
+
+            <!-- Right Side: Independent Modular HUD Blocks (45° Chamfered Cyber Cuts) -->
+            <div class="hud-right-group">
+                <!-- 1. Currency Block (Independent Cyber Card) -->
+                <div class="hud-currency-card" id="hudCurrencyCard">
+                    <!-- XP -->
+                    <div class="curr-pill" title="Experience">
+                        <div class="xp-hex-badge">
+                            <span>XP</span>
+                        </div>
+                        <span class="curr-val xp-val">2,450</span>
+                    </div>
+
+                    <div class="curr-divider"></div>
+
+                    <!-- Gold Coins -->
+                    <div class="curr-pill" title="Credits">
+                        <div class="curr-icon coin-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20">
+                                <defs>
+                                    <linearGradient id="goldCoinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#fef08a" />
+                                        <stop offset="45%" stop-color="#eab308" />
+                                        <stop offset="100%" stop-color="#b45309" />
+                                    </linearGradient>
+                                    <linearGradient id="goldCoinRim" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#fef9c3" />
+                                        <stop offset="100%" stop-color="#ca8a04" />
+                                    </linearGradient>
+                                </defs>
+                                <circle cx="12" cy="12" r="10" fill="url(#goldCoinGrad)" stroke="url(#goldCoinRim)"
+                                    stroke-width="1.2" />
+                                <circle cx="12" cy="12" r="8.2" fill="none" stroke="#78350f" stroke-width="0.8"
+                                    opacity="0.6" />
+                                <path d="M7.5 7.5 L16.5 16.5 M16.5 7.5 L7.5 16.5" stroke="#78350f" stroke-width="1.8"
+                                    stroke-linecap="round" />
+                                <circle cx="12" cy="12" r="2.6" fill="#fef08a" stroke="#ca8a04" stroke-width="0.8" />
+                            </svg>
+                        </div>
+                        <span class="curr-val coin-val">1,280</span>
+                    </div>
+
+                    <div class="curr-divider"></div>
+
+                    <!-- Shards / Diamonds -->
+                    <div class="curr-pill" title="Aether Shards">
+                        <div class="curr-icon diamond-icon">
+                            <svg viewBox="0 0 24 24" width="19" height="18">
+                                <defs>
+                                    <linearGradient id="cyanDiamondGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#93c5fd" />
+                                        <stop offset="40%" stop-color="#38bdf8" />
+                                        <stop offset="100%" stop-color="#0284c7" />
+                                    </linearGradient>
+                                </defs>
+                                <polygon points="12,2 21,7.5 12,22 3,7.5" fill="url(#cyanDiamondGrad)" stroke="#bae6fd"
+                                    stroke-width="0.8" />
+                                <polygon points="12,2 17,7.5 12,13 7,7.5" fill="#e0f2fe" opacity="0.95" />
+                                <polygon points="12,2 21,7.5 17,7.5" fill="#bae6fd" opacity="0.85" />
+                                <polygon points="12,2 3,7.5 7,7.5" fill="#93c5fd" opacity="0.85" />
+                                <polygon points="12,2 17,7.5 21,7.5" fill="#0284c7" opacity="0.75" />
+                                <polygon points="7,7.5 3,7.5 12,22" fill="#0369a1" opacity="0.95" />
+                            </svg>
+                        </div>
+                        <span class="curr-val shard-val">42</span>
+                    </div>
+
+                    <div class="curr-divider"></div>
+
+                    <!-- Energy / Hearts -->
+                    <div class="curr-pill energy-pill" title="Guardian Energy">
+                        <div class="curr-icon heart-icon">
+                            <svg viewBox="0 0 24 24" width="19" height="19">
+                                <defs>
+                                    <linearGradient id="redHeartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#f87171" />
+                                        <stop offset="60%" stop-color="#ef4444" />
+                                        <stop offset="100%" stop-color="#b91c1c" />
+                                    </linearGradient>
+                                </defs>
+                                <path
+                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                                    fill="url(#redHeartGrad)" filter="drop-shadow(0 0 5px rgba(239, 68, 68, 0.6))" />
+                            </svg>
+                        </div>
+                        <span class="curr-val heart-val">5/5</span>
+                        <button class="curr-plus-btn" id="btnRefillEnergy" type="button" aria-label="Refill Energy"
+                            title="Refill Energy">+</button>
+                    </div>
+                </div>
+
+                <!-- 2. Guardian Profile Block (Independent Cyber Card) -->
+                <div class="hud-profile-card" id="hudProfileCard" title="View Guardian Dossier">
+                    <!-- Popout Avatar Circle Portal -->
+                    <div class="profile-avatar-frame">
+                        <div class="avatar-circle-base"></div>
+                        <img src="assets/images/characters/guardian.png" alt="Corebound Guardian"
+                            class="profile-avatar-img" onerror="this.src='assets/images/characters/blaze_avatar.png';">
+                    </div>
+
+                    <!-- Profile Text & Progress Details -->
+                    <div class="profile-details">
+                        <div class="profile-role">COREBOUND GUARDIAN</div>
+                        <div class="profile-level">LEVEL 12</div>
+                        <div class="profile-progress-track">
+                            <div class="profile-progress-bar" style="width: 72%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Prevent static HUD flicker for authenticated sessions -->
+        <script>
+            (function () {
+                try {
+                    if (localStorage.getItem('corebound_token')) {
+                        var xp = document.querySelector('.curr-val.xp-val');
+                        if (xp) xp.textContent = '—';
+                        var coin = document.querySelector('.curr-val.coin-val');
+                        if (coin) coin.textContent = '—';
+                        var shard = document.querySelector('.curr-val.shard-val');
+                        if (shard) shard.textContent = '—';
+                        var heart = document.querySelector('.curr-val.heart-val');
+                        if (heart) heart.textContent = '—';
+                        var lvl = document.querySelector('.profile-level');
+                        if (lvl) lvl.textContent = 'LEVEL —';
+                        var bar = document.querySelector('.profile-progress-bar');
+                        if (bar) bar.style.width = '0%';
+                        var role = document.querySelector('.profile-role');
+                        if (role) role.textContent = 'GUARDIAN';
+                    }
+                } catch (e) {}
+            })();
+        </script>
+
+        <!-- Audio Elements -->
+        <audio id="levelBgMusic" loop preload="auto">
+            <source src="assets/audio/aurora_bg_music.mp3" type="audio/mpeg">
+            <source src="assets/audio/level_ambient.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="sfxClick" preload="auto">
+            <source src="assets/audio/click.wav" type="audio/wav">
+            <source src="assets/audio/enter-click.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- ==========================================
+             AAA RPG CYBER SIDEBAR NAVIGATION
+             ========================================== -->
+        <aside class="compact-dock" id="leftNavDock">
+            <nav class="dock-nav">
+                <ul class="dock-list">
+                    <!-- 1. MAP -->
+                    <li class="dock-item active" style="--i:1">
+                        <span class="dock-active-glow"></span>
+                        <span class="dock-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                                <line x1="8" y1="2" x2="8" y2="18"></line>
+                                <line x1="16" y1="6" x2="16" y2="22"></line>
+                            </svg>
+                        </span>
+                        <span class="dock-label">MAP</span>
+                    </li>
+
+                    <!-- 2. QUESTS -->
+                    <li class="dock-item" style="--i:2">
+                        <span class="dock-active-glow"></span>
+                        <span class="dock-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                        </span>
+                        <span class="dock-label">QUESTS</span>
+                    </li>
+
+                    <!-- 3. GUARDIANS -->
+                    <li class="dock-item" style="--i:3">
+                        <span class="dock-active-glow"></span>
+                        <span class="dock-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                <polygon points="12 8 13.5 11 17 11.5 14.5 14 15 17.5 12 15.8 9 17.5 9.5 14 7 11.5 10.5 11"></polygon>
+                            </svg>
+                        </span>
+                        <span class="dock-label">GUARDIANS</span>
+                    </li>
+
+                    <!-- 4. ACHIEVEMENTS -->
+                    <li class="dock-item" style="--i:4">
+                        <span class="dock-active-glow"></span>
+                        <span class="dock-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                                <path d="M4 22h16"></path>
+                                <path d="M10 14.66V17c0 .55-.45 1-1 1H8v4h8v-4h-1c-.55 0-1-.45-1-1v-2.34"></path>
+                                <path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path>
+                            </svg>
+                        </span>
+                        <span class="dock-label">ACHIEVEMENTS</span>
+                    </li>
+
+                    <!-- 5. SETTINGS -->
+                    <li class="dock-item" id="settingsDockBtn" style="--i:5">
+                        <span class="dock-active-glow"></span>
+                        <span class="dock-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                </path>
+                            </svg>
+                        </span>
+                        <span class="dock-label">SETTINGS</span>
+                    </li>
+
+                    <!-- 6. PROFILE -->
+                    <li class="dock-item" id="profileDockBtn" style="--i:6">
+                        <span class="dock-active-glow"></span>
+                        <span class="dock-icon">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <span class="dock-label">PROFILE</span>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- ==========================================
+             SETTINGS MODAL (Cyberpunk Frost Modal)
+             ========================================== -->
+        <div class="settings-modal-overlay" id="settingsModal">
+            <div class="settings-card">
+                <div class="settings-header">
+                    <div class="settings-title-wrap">
+                        <span class="settings-icon">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#38bdf8"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3" />
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                            </svg>
+                        </span>
+                        <h2 class="settings-title">SYSTEM SETTINGS</h2>
+                    </div>
+                    <button class="settings-close-btn" id="settingsCloseBtn" aria-label="Close Settings">✕</button>
+                </div>
+
+                <div class="settings-body">
+                    <!-- Music ON / OFF Row -->
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <span class="setting-label">BACKGROUND MUSIC</span>
+                            <span class="setting-sub">Cosmic ambient soundscape (Aurora)</span>
+                        </div>
+                        <label class="cyber-toggle">
+                            <input type="checkbox" id="musicToggleCheckbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+
+                    <!-- SFX ON / OFF Row -->
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <span class="setting-label">SOUND EFFECTS</span>
+                            <span class="setting-sub">UI clicks, whooshes & realm ignitions</span>
+                        </div>
+                        <label class="cyber-toggle">
+                            <input type="checkbox" id="sfxToggleCheckbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             GUARDIAN DOSSIER MODAL (Cyber-Fantasy Hero Profile)
+             ========================================== -->
+        <div class="guardian-modal-overlay" id="guardianModal" aria-hidden="true">
+            <div class="guardian-modal-card">
+                <!-- Close Button -->
+                <button class="guardian-modal-close-btn" id="guardianModalCloseBtn" type="button"
+                    aria-label="Close Dossier">✕</button>
+
+                <div class="guardian-modal-grid">
+                    <!-- Left: Hero Portrait Showcase -->
+                    <div class="guardian-visual-col">
+                        <div class="guardian-portrait-frame">
+                            <div class="portrait-glow-ring"></div>
+                            <img src="assets/images/characters/guardian.png" alt="Corebound Guardian"
+                                class="guardian-portrait-img">
+                            <div class="guardian-rank-tag">RANK S // SENTINEL</div>
+                        </div>
+                        <div class="guardian-badges-row">
+                            <div class="g-badge-chip">
+                                <span class="chip-icon">⚡</span>
+                                <span class="chip-txt">AETHER ATTUNED</span>
+                            </div>
+                            <div class="g-badge-chip">
+                                <span class="chip-icon">🛡️</span>
+                                <span class="chip-txt">AEGIS ACTIVE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Details, Attributes & Lore -->
+                    <div class="guardian-info-col">
+                        <!-- Header -->
+                        <div class="guardian-header-block">
+                            <div class="guardian-meta-tag">CYBER-FANTASY OPERATOR</div>
+                            <h2 class="guardian-title-text">COREBOUND GUARDIAN</h2>
+                            <p class="guardian-role-desc">The Chosen Sentinel awakened to protect the Celestial Core and
+                                restore the 9 Knowledge Sectors.</p>
+                        </div>
+
+                        <!-- Level & Experience Card -->
+                        <div class="guardian-xp-card">
+                            <div class="xp-card-top">
+                                <span class="xp-level-badge">LEVEL 12</span>
+                                <span class="xp-ratio-text"><strong style="color:#d8b4fe;">2,450</strong> / 3,500
+                                    XP</span>
+                            </div>
+                            <div class="xp-card-bar-track">
+                                <div class="xp-card-bar-fill" style="width: 70%;"></div>
+                            </div>
+                            <div class="xp-card-footnote">Next Tier: Ascendant Sentinel (+10% Energy Refill Speed)</div>
+                        </div>
+
+                        <!-- Core Combat & Knowledge Attributes -->
+                        <div class="guardian-stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-label">ENERGY CAPACITY</div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val heart-color" id="dossierEnergyCapacity">—</span>
+                                    <span class="stat-sub">MAX POOL</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">LOGIC SYNTHESIS</div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val cyan-color" id="dossierLogicSynth">—</span>
+                                    <span class="stat-sub">MASTERY</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">PATTERN ANALYSIS</div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val violet-color" id="dossierPatternAnalysis">—</span>
+                                    <span class="stat-sub">ACCURACY</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-label">CORRUPTION SHIELD</div>
+                                <div class="stat-value-row">
+                                    <span class="stat-val gold-color" id="dossierCorruptionShield">—</span>
+                                    <span class="stat-sub">STABLE</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Lore / Mission Dossier -->
+                        <div class="guardian-dossier-box">
+                            <div class="dossier-heading">CORE MEMORY ARCHIVE</div>
+                            <p class="dossier-text">
+                                "Forged in the heart of the Pattern Observatory when NULL struck the celestial matrix.
+                                As the primary Guardian, your connection channels aetheric knowledge lines directly
+                                across each sector to purge corrupt logic nodes."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             WORLD MAP STAGE
+             ========================================== -->
+        <main class="world-map-stage">
+
+            <!-- ==========================================
+                 HIGH-VOLTAGE ELECTRIC PLASMA & LIGHTNING CONDUIT NETWORK
+                 Layer 1: Electric Corona Atmospheric Glow
+                 Layer 2: Hi-Tech Electrical Conduit Rail
+                 Layer 3: Supercharged Lightning Plasma Core (Flickering)
+            <!-- Energy lines removed per user request -->
+            <svg id="energyConduitsSvg" style="display: none;">
+                <g id="orbitalConduitGroup"></g>
+            </svg>
+
+            <!-- ==========================================
+                 3D CELESTIAL ORBITAL CAROUSEL STAGE
+                 Hero Center Island + 3D Flanking Perspective
+                 ========================================== -->
+            <div class="orbital-carousel-container" id="orbitalCarouselContainer">
+
+                <!-- 3D Orbit Islands Layer -->
+                <div class="islands-layer orbital-islands-stage" id="islandsLayer">
+
+                    <!-- ISLAND 1: PATTERN OBSERVATORY -->
+                    <div class="island-node island-1 slot-center is-unlocked" data-island="1">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge badge-active" id="orbitBadge-1">
+                            <span class="badge-dot"></span>
+                            <span class="badge-title-text">1. PATTERN OBSERVATORY</span>
+                        </div>
+                        <div class="island-aura aura-violet"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/pattern_observatory.png"
+                                alt="Pattern Observatory" class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-active island-plate-card">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">1</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">PATTERN OBSERVATORY</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">7/10 MISSIONS COMPLETED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 2: LOGIC NEXUS -->
+                    <div class="island-node island-2 slot-right-1 is-locked" data-island="2">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-2">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">2. LOGIC NEXUS</span>
+                        </div>
+                        <div class="island-aura aura-cyan"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/logic_nexus.png" alt="Logic Nexus"
+                                class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">2</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">LOGIC NEXUS</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 3: PROGRAMMING DISTRICT -->
+                    <div class="island-node island-3 slot-right-2 is-locked" data-island="3">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-3">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">3. PROGRAMMING DISTRICT</span>
+                        </div>
+                        <div class="island-aura aura-blue"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/programming_district.png"
+                                alt="Programming District" class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">3</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">PROGRAMMING DISTRICT</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 4: ALGORITHM FORGE -->
+                    <div class="island-node island-4 slot-right-3 is-locked" data-island="4">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-4">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">4. ALGORITHM FORGE</span>
+                        </div>
+                        <div class="island-aura aura-amber"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/algorithm_forge.png"
+                                alt="Algorithm Forge" class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">4</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">ALGORITHM FORGE</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 5: DATABASE VAULT -->
+                    <div class="island-node island-5 slot-right-4 is-locked" data-island="5">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-5">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">5. DATABASE VAULT</span>
+                        </div>
+                        <div class="island-aura aura-emerald"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/database_vault.png" alt="Database Vault"
+                                class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">5</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">DATABASE VAULT</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 6: NETWORK GRID -->
+                    <div class="island-node island-6 slot-left-4 is-locked" data-island="6">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-6">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">6. NETWORK GRID</span>
+                        </div>
+                        <div class="island-aura aura-cyan"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/network_grid.png" alt="Network Grid"
+                                class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">6</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">NETWORK GRID</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 7: SYSTEM CORE -->
+                    <div class="island-node island-7 slot-left-3 is-locked" data-island="7">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-7">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">7. SYSTEM CORE</span>
+                        </div>
+                        <div class="island-aura aura-gold"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/system_core.png" alt="System Core"
+                                class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">7</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">SYSTEM CORE</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 8: COMMUNICATION CITADEL -->
+                    <div class="island-node island-8 slot-left-2 is-locked" data-island="8">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-8">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">8. COMMUNICATION CITADEL</span>
+                        </div>
+                        <div class="island-aura aura-blue"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/communication_citadel.png"
+                                alt="Communication Citadel" class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">8</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">COMMUNICATION CITADEL</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISLAND 9: PLACEMENT ARENA -->
+                    <div class="island-node island-9 slot-left-1 is-locked" data-island="9">
+                        <!-- Holographic Top Sector Badge -->
+                        <div class="island-orbit-badge is-locked" id="orbitBadge-9">
+                            <span class="badge-lock-icon">🔒</span>
+                            <span class="badge-title-text">9. PLACEMENT ARENA</span>
+                        </div>
+                        <div class="island-aura aura-purple"></div>
+                        <div class="island-sparkles" aria-hidden="true">
+                            <span class="isl-sparkle sp-1">✦</span>
+                            <span class="isl-sparkle sp-2">✧</span>
+                            <span class="isl-sparkle sp-3">✦</span>
+                            <span class="isl-sparkle sp-4">✧</span>
+                        </div>
+                        <div class="island-art"><img src="assets/images/islands/placement_arena.png"
+                                alt="Placement Arena" class="island-img"></div>
+                        <div class="island-energy-ripples" aria-hidden="true">
+                            <span class="energy-ripple ripple-1"></span>
+                            <span class="energy-ripple ripple-2"></span>
+                            <span class="energy-ripple ripple-3"></span>
+                        </div>
+                        <div class="loc-card loc-locked island-plate-card is-locked">
+                            <div class="plate-header">
+                                <div class="plate-medallion">
+                                    <span class="medallion-tick-left"></span>
+                                    <span class="medallion-tick-right"></span>
+                                    <span class="medallion-num">9</span>
+                                </div>
+                                <div class="plate-title-bar">
+                                    <span class="plate-title">PLACEMENT ARENA</span>
+                                </div>
+                            </div>
+                            <div class="plate-sub-panel">
+                                <span class="plate-status-label">🔒 LOCKED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sleek Cyber Orbital Navigation Chevrons (< and >) -->
+                <button class="carousel-nav-btn nav-btn-prev" id="btnCarouselPrev" type="button"
+                    aria-label="Previous Knowledge Sector" title="Previous Sector (Left Arrow)">
+                    <span class="nav-btn-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </span>
+                    <span class="nav-btn-aura"></span>
+                </button>
+                <button class="carousel-nav-btn nav-btn-next" id="btnCarouselNext" type="button"
+                    aria-label="Next Knowledge Sector" title="Next Sector (Right Arrow)">
+                    <span class="nav-btn-icon">
+                        <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </span>
+                    <span class="nav-btn-aura"></span>
+                </button>
+
+            </div>
+        </main>
+
+        <!-- ==========================================
+             RIGHT DASHBOARD
+             ========================================== -->
+        <!-- ==========================================
+             RIGHT DASHBOARD (Matches Reference Spec)
+             ========================================== -->
+        <aside class="right-dash">
+            <!-- 1. Daily Reward Cyber Card (Top) -->
+            <div class="dash-panel reward-panel cyber-spec-card card-reward" id="dailyRewardCard">
+                <!-- Precision Cyber Chamfered Frame Overlay (Gold Tint) -->
+                <svg class="card-frame-svg" viewBox="0 0 250 250" preserveAspectRatio="none">
+                    <!-- Chamfered Outer Border -->
+                    <path d="M 12 1.5 L 238 1.5 L 248.5 12 L 248.5 238 L 238 248.5 L 12 248.5 L 1.5 238 L 1.5 12 Z"
+                        fill="none" stroke="rgba(245, 158, 11, 0.60)" stroke-width="1.5" />
+                    <!-- Top-Left Gold Metallic Bracket -->
+                    <path d="M 28 1.5 L 12 1.5 L 1.5 12 L 1.5 28" fill="none" stroke="#f59e0b" stroke-width="2.5"
+                        stroke-linecap="square" />
+                    <!-- Top-Right Gold Metallic Bracket -->
+                    <path d="M 222 1.5 L 238 1.5 L 248.5 12 L 248.5 28" fill="none" stroke="#f59e0b" stroke-width="2.5"
+                        stroke-linecap="square" />
+                    <!-- Bottom-Left Gold Metallic Bracket -->
+                    <path d="M 1.5 222 L 1.5 238 L 12 248.5 L 28 248.5" fill="none" stroke="#f59e0b" stroke-width="2.5"
+                        stroke-linecap="square" />
+                    <!-- Bottom-Right Gold Metallic Bracket -->
+                    <path d="M 248.5 222 L 248.5 238 L 238 248.5 L 222 248.5" fill="none" stroke="#f59e0b"
+                        stroke-width="2.5" stroke-linecap="square" />
+                    <!-- Top Edge Gold Accent Clip -->
+                    <line x1="110" y1="1.5" x2="140" y2="1.5" stroke="#fbbf24" stroke-width="2.5" />
+                </svg>
+                <div class="holo-sheen"></div>
+
+                <h3 class="panel-title reward-title">DAILY REWARD</h3>
+
+                <div class="reward-visual">
+                    <div class="reward-sunburst-rays"></div>
+                    <!-- Ambient Golden Stardust Particles -->
+                    <div class="reward-sparkles" aria-hidden="true">
+                        <span class="sparkle s1">✦</span>
+                        <span class="sparkle s2">✧</span>
+                        <span class="sparkle s3">✦</span>
+                        <span class="sparkle s4">✧</span>
+                    </div>
+                    <img src="assets/images/reward_quest.png" alt="Daily Reward Chest" class="reward-chest-img"
+                        onerror="this.style.display='none'">
+                </div>
+
+                <div class="reward-timer" id="rewardTimer">
+                    <span id="timerHours">12</span><span class="timer-colon">:</span><span id="timerMins">45</span><span
+                        class="timer-colon">:</span><span id="timerSecs">30</span>
+                </div>
+
+                <!-- Prominent Cyber CLAIM Button -->
+                <button class="claim-btn cyber-action-btn btn-claim" id="claimRewardBtn" type="button">
+                    <span class="btn-shine"></span>
+                    <span class="btn-entrance-flash"></span>
+                    <span class="btn-text">CLAIM</span>
+                </button>
+            </div>
+
+            <!-- 2. Chapter Progress Cyber Card (Bottom) -->
+            <div class="dash-panel progress-panel cyber-spec-card" id="chapterProgressCard">
+                <div class="holo-sheen"></div>
+                <!-- Precision Cyber Chamfered Frame Overlay -->
+                <svg class="card-frame-svg" viewBox="0 0 250 300" preserveAspectRatio="none">
+                    <!-- Chamfered Outer Border -->
+                    <path d="M 12 1.5 L 238 1.5 L 248.5 12 L 248.5 288 L 238 298.5 L 12 298.5 L 1.5 288 L 1.5 12 Z"
+                        fill="none" stroke="rgba(56, 189, 248, 0.55)" stroke-width="1.5" />
+                    <!-- Top-Left Metallic Bracket -->
+                    <path d="M 28 1.5 L 12 1.5 L 1.5 12 L 1.5 28" fill="none" stroke="#38bdf8" stroke-width="2.5"
+                        stroke-linecap="square" />
+                    <!-- Top-Right Metallic Bracket -->
+                    <path d="M 222 1.5 L 238 1.5 L 248.5 12 L 248.5 28" fill="none" stroke="#38bdf8" stroke-width="2.5"
+                        stroke-linecap="square" />
+                    <!-- Bottom-Left Metallic Bracket -->
+                    <path d="M 1.5 272 L 1.5 288 L 12 298.5 L 28 298.5" fill="none" stroke="#38bdf8" stroke-width="2.5"
+                        stroke-linecap="square" />
+                    <!-- Bottom-Right Metallic Bracket -->
+                    <path d="M 248.5 272 L 248.5 288 L 238 298.5 L 222 298.5" fill="none" stroke="#38bdf8"
+                        stroke-width="2.5" stroke-linecap="square" />
+                    <!-- Top Edge Metallic Clip Accent -->
+                    <line x1="110" y1="1.5" x2="140" y2="1.5" stroke="#38bdf8" stroke-width="2.5" />
+                </svg>
+
+                <h3 class="panel-title">CHAPTER PROGRESS</h3>
+
+                <div class="progress-ring-wrap">
+                    <svg class="ring-svg" viewBox="0 0 150 150">
+                        <defs>
+                            <linearGradient id="progressGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#7c3aed" />
+                                <stop offset="45%" stop-color="#a855f7" />
+                                <stop offset="75%" stop-color="#0284c7" />
+                                <stop offset="100%" stop-color="#00f0ff" />
+                            </linearGradient>
+                            <filter id="ringBloom" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur" />
+                                <feMerge>
+                                    <feMergeNode in="blur" />
+                                    <feMergeNode in="SourceGraphic" />
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        <!-- Dark Indigo Track -->
+                        <circle class="ring-track" cx="75" cy="75" r="56" stroke="rgba(30, 42, 75, 0.65)"
+                            stroke-width="11" fill="none" />
+                        <!-- 4 Quadrant Notches / Reticle Ticks -->
+                        <line x1="75" y1="14" x2="75" y2="24" stroke="rgba(6, 12, 28, 0.95)" stroke-width="2.5" />
+                        <line x1="126" y1="75" x2="136" y2="75" stroke="rgba(6, 12, 28, 0.95)" stroke-width="2.5" />
+                        <line x1="75" y1="126" x2="75" y2="136" stroke="rgba(6, 12, 28, 0.95)" stroke-width="2.5" />
+                        <line x1="14" y1="75" x2="24" y2="75" stroke="rgba(6, 12, 28, 0.95)" stroke-width="2.5" />
+                        <!-- 70% Progress Filled Arc -->
+                        <circle class="ring-bar" cx="75" cy="75" r="56" stroke-width="11" fill="none"
+                            stroke="url(#progressGrad)" stroke-dasharray="351.85" stroke-dashoffset="105.5"
+                            filter="url(#ringBloom)" />
+                    </svg>
+                    <div class="ring-label">
+                        <span class="ring-num" id="progressPctText">70</span><span class="ring-pct">%</span>
+                    </div>
+                </div>
+
+                <div class="progress-detail" id="enterObservatoryBtn">
+                    <span class="detail-badge" id="inspectorSubTitle">CHAPTER 1</span>
+                    <h4 class="detail-name" id="inspectorTitle">PATTERN OBSERVATORY</h4>
+                </div>
+
+                <div class="legend-sep"></div>
+
+                <!-- ThreeUI Induction Button (ShaderButtons - Raw WebGL) -->
+                <button class="start-mission-btn induction-btn" id="startMissionBtn" type="button"
+                    title="Start Mission">
+                    <canvas id="btn-gl" class="induction-canvas" aria-hidden="true"></canvas>
+                    <span class="induction-label" id="inspectorCtaText">START</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- ==========================================
+             NOVA FIRST TRANSMISSION CENTER STAGE (Intro)
+             ========================================== -->
+        <div class="nova-center-intro" id="novaCenterIntro">
+            <div class="nova-center-stage">
+                <!-- Celestial Hologram Aura & Glow Pedestal -->
+                <div class="nova-center-aura"></div>
+
+                <!-- Nova Character Image -->
+                <div class="nova-center-avatar-wrap">
+                    <img src="assets/images/characters/nova.png" alt="Nova AI" class="nova-center-img"
+                        onerror="this.src='assets/images/characters/nova_avatar.png';">
+                    <div class="nova-center-pedestal"></div>
+                </div>
+
+                <!-- Dialogue Bubble Directly Beneath Nova -->
+                <div class="nova-center-bubble" id="novaCenterBubble">
+                    <div class="nova-center-bubble-header">
+                        <div class="nova-center-tag">
+                            <span class="nova-tag-beacon"></span>
+                            <span class="nova-tag-name">NOVA</span>
+                            <span class="nova-tag-role">AI COMPANION</span>
+                        </div>
+                        <div class="nova-center-header-right">
+                            <div class="nova-soundwave" id="novaCenterSoundwave" aria-hidden="true">
+                                <span class="wave-bar wb1"></span>
+                                <span class="wave-bar wb2"></span>
+                                <span class="wave-bar wb3"></span>
+                                <span class="wave-bar wb4"></span>
+                                <span class="wave-bar wb5"></span>
+                            </div>
+                            <button class="nova-center-skip-btn" id="novaIntroSkipBtn" type="button" title="Skip Intro">SKIP ❯</button>
+                        </div>
+                    </div>
+                    <div class="nova-center-bubble-body">
+                        <p class="nova-center-dialogue-text" id="novaCenterDialogueText">
+                            <span class="typewriter-cursor">|</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             NOVA INTERACTIVE VOICE BUBBLE (Bottom Left HUD)
+             ========================================== -->
+        <div class="nova-voice-panel" id="novaVoicePanel">
+            <!-- Nova Avatar 3D Pop-Out Button (Clickable toggle) -->
+            <button class="nova-avatar-btn" id="novaAvatarBtn" type="button" title="Toggle Nova AI Guidance"
+                aria-label="Toggle Nova AI Guidance">
+                <div class="nova-pod-aura" aria-hidden="true"></div>
+                <div class="nova-avatar-ring"></div>
+                <div class="nova-avatar-base">
+                    <img src="assets/images/characters/nova_avatar.png" alt="Nova" class="nova-img">
+                </div>
+                <div class="nova-avatar-top" aria-hidden="true">
+                    <img src="assets/images/characters/nova_avatar.png" alt="" class="nova-img">
+                </div>
+                <span class="nova-status-beacon" title="Nova AI Active">
+                    <span class="beacon-ping"></span>
+                    <span class="beacon-core"></span>
+                </span>
+            </button>
+
+            <!-- Expandable Speech Bubble -->
+            <div class="nova-bubble-wrap" id="novaBubbleWrap">
+                <div class="nova-bubble-emitter" aria-hidden="true"></div>
+                <div class="nova-bubble-header">
+                    <div class="nova-id-tag">
+                        <span class="nova-tag-name">NOVA</span>
+                        <span class="nova-tag-role">AI COMPANION</span>
+                    </div>
+
+                    <!-- Live Voice Waveform -->
+                    <div class="nova-soundwave" id="novaSoundwave" aria-hidden="true">
+                        <span class="wave-bar wb1"></span>
+                        <span class="wave-bar wb2"></span>
+                        <span class="wave-bar wb3"></span>
+                        <span class="wave-bar wb4"></span>
+                        <span class="wave-bar wb5"></span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="nova-bubble-actions">
+                        <button class="nova-action-btn" id="novaReplayBtn" type="button"
+                            title="Replay Audio Chime & Hint" aria-label="Replay Hint">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            </svg>
+                        </button>
+                        <button class="nova-action-btn" id="novaMinimizeBtn" type="button" title="Minimize Bubble"
+                            aria-label="Minimize">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="nova-bubble-body">
+                    <p class="nova-dialogue" id="novaDialogueText">Guardian, NULL's corruption is destabilizing the
+                        Core.<br><span style="color:#38bdf8;font-weight:600;">Pattern Observatory</span> is
+                        active. Select it to begin our mission!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             MATCHSTICK IGNITION CANVAS
+             ========================================== -->
+        <canvas id="ignitionCanvas" class="ignition-canvas"></canvas>
+
+        <!-- ==========================================
+             CHAPTER 1 MISSION LOADING OVERLAY (MINIMAL)
+             ========================================== -->
+        <div class="chapter-loading-overlay" id="chapterLoadingOverlay" aria-hidden="true">
+            <div class="loading-minimal-card">
+                <div class="loading-minimal-icon">
+                    <img src="assets/images/corebound_logo.png" alt="COREBOUND" class="minimal-logo-img">
+                </div>
+
+                <div class="loading-minimal-info">
+                    <span class="minimal-sub">CHAPTER 01</span>
+                    <h2 class="minimal-title">PATTERN OBSERVATORY</h2>
+                </div>
+
+                <div class="loading-minimal-bar">
+                    <div class="loading-minimal-fill" id="loadingGaugeFill"></div>
+                </div>
+
+                <div class="loading-minimal-status">
+                    <span class="minimal-status-text" id="loadingStageLabel">CONNECTING...</span>
+                    <span class="minimal-pct-text" id="loadingPctDisplay">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio Elements for Background Ambient Music and Interactions -->
+        <audio id="levelBgMusic" src="assets/audio/level_ambient.mp3" loop preload="auto"></audio>
+        <audio id="sfxClick" src="assets/audio/click.wav" preload="auto"></audio>
+        <audio id="sfxWhoosh" src="assets/audio/whoosh-laser-blast-2-roys-noise-water-ball-fast-2-7-0m02s.mp3" preload="auto"></audio>
+    </div>
+
+    <!-- World Map Controller & Cosmic Engine -->
+    <script src="level.js" defer></script>
+</body>
+
+</html>

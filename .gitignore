@@ -1,9 +1,44 @@
+
+# Python
 .venv/
+venv/
 __pycache__/
-*.pyc
-.env
-.vscode/
+*.py[cod]
 .pytest_cache/
 .mypy_cache/
 .coverage
 htmlcov/
+
+# Environment variables and editor
+.env
+.env.*
+!.env.example
+.vscode/
+
+# Node.js
+node_modules/
+
+# Browser temporary data
+scratch/
+chrome_user_data*/
+**/chrome_user_data*/
+
+# Build files
+.dist/
+dist/
+build/
+
+# Cache and logs
+.cache/
+*.log
+
+# Backup archives
+*.zip
+
+# Duplicate nested backend repo (backend code already tracked at repo root)
+corebound_backend/
+
+# Extra reports, scratch outputs, and unused preview images
+**/pdf_previews/
+phase13b_test_results.txt
+scratch_phase14c_eval.py

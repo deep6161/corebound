@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="importmap">
+        { "imports": { "animejs": "https://unpkg.com/animejs@4.5.0/dist/modules/index.js", "animejs/": "https://esm.sh/animejs@^4.4.1/", "animejs/adapters/three": "https://unpkg.com/animejs@4.5.0/dist/modules/adapters/three/index.js", "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+        "three/": "https://esm.sh/three@^0.184.0/", "three/addons/": "https://unpkg.com/three@0.184.0/examples/jsm/" } }
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COREBOUND — Loading</title>
+    <!-- Preload Phase 1 Story assets during 3D intro for seamless zero-lag transition -->
+    <link rel="preload" as="image" href="assets/background/first_background.png">
+    <link rel="preload" as="image" href="assets/images/corebound_logo.png">
+    <link rel="stylesheet" href="theme-tokens.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #03020c;
+        }
+
+        #logo {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 3D Text SVG (CoreBound) -->
+    <svg id="logo" viewBox="0 0 140 15" xmlns="http://www.w3.org/2000/svg">
+        <g fill-rule="evenodd">
+            <path id="c" d="M12 0 L2 0 L0 2 L0 10 L2 12 L12 12 L10 9 L4 9 L4 3 L10 3 Z" fill="#FFF" />
+            <path id="o1" d="M16 0 L26 0 L28 2 L28 10 L26 12 L16 12 L14 10 L14 2 Z M18 3 L18 9 L24 9 L24 3 Z"
+                fill="#FFF" />
+            <path id="r" d="M30 0 L40 0 L42 2 L42 6 L38 7 L42 12 L37 12 L34 8 L34 12 L30 12 Z M34 3 L34 6 L38 6 L38 3 Z"
+                fill="#FFF" />
+            <path id="e" d="M44 0 L56 0 L54 3 L48 3 L48 4.5 L53 4.5 L53 7.5 L48 7.5 L48 9 L54 9 L56 12 L44 12 Z"
+                fill="#FFF" />
+            <path id="b"
+                d="M58 0 L66 0 L70 2 L70 5 L68 6 L70 7 L70 10 L66 12 L58 12 Z M62 3 L62 5 L66 5 L66 3 Z M62 7 L62 9 L66 9 L66 7 Z"
+                fill="#FFF" />
+            <path id="o2" d="M72 0 L82 0 L84 2 L84 10 L82 12 L72 12 L70 10 L70 2 Z M74 3 L74 9 L80 9 L80 3 Z"
+                fill="#FFF" />
+            <path id="u" d="M86 0 L90 0 L90 9 L94 9 L94 0 L98 0 L98 10 L96 12 L88 12 L86 10 Z" fill="#FFF" />
+            <path id="n" d="M100 0 L104 0 L108 6 L108 0 L112 0 L112 12 L108 12 L104 6 L104 12 L100 12 Z" fill="#FFF" />
+            <path id="d" d="M114 0 L122 0 L126 2 L126 10 L122 12 L114 12 Z M118 3 L118 9 L122 9 L122 3 Z" fill="#FFF" />
+        </g>
+    </svg>
+
+    <script type="module" src="./script.js"></script>
+</body>
+
+</html>

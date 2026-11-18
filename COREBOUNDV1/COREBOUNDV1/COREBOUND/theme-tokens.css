@@ -1,0 +1,164 @@
+/* ==========================================================================
+   COREBOUND UNIFIED DESIGN SYSTEM — THEME TOKENS
+   Standardized variables across loading.html, story.html, and level.html
+   ========================================================================== */
+
+:root {
+    /* ── COSMIC BACKGROUNDS ── */
+    --space: #03020c;
+    --space-deep: #05021a;
+    --space-dark: #000000;
+
+    /* ── GLASSMORPHISM PANELS ── */
+    --glass-panel: rgba(10, 8, 28, 0.78);
+    --glass-panel-deep: rgba(6, 4, 18, 0.88);
+    --glass-border: rgba(139, 92, 246, 0.28);
+    --glass-border-light: rgba(168, 85, 247, 0.45);
+    --glass-hover-border: rgba(0, 229, 255, 0.65);
+    --glass-blur: blur(14px);
+
+    /* ── CORE ACCENT COLOR SYSTEM ── */
+    --cyan: #00e5ff;
+    --cyan-dim: #38bdf8;
+    --cyan-glow: rgba(0, 229, 255, 0.45);
+
+    --violet: #8b5cf6;
+    --violet-light: #a78bfa;
+    --violet-glow: rgba(139, 92, 246, 0.40);
+    --purple: #7c3aed;
+
+    --gold: #f5b942;
+    --gold-glow: rgba(245, 185, 66, 0.35);
+
+    /* ── TYPOGRAPHY ── */
+    --font-display: 'Cinzel', Georgia, serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+    --text-primary: #edf2f7;
+    --text-secondary: #cbd5e1;
+    --text-muted: rgba(203, 213, 225, 0.70);
+
+    /* ── BORDER RADII ── */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+}
+
+/* ==========================================================================
+   UNIFIED BUTTON UTILITIES
+   ========================================================================== */
+
+/* ── UNIVERSAL SKIP BUTTON (Chamfered Cyber Polygon Specification) ── */
+.cb-skip-btn {
+    position: fixed;
+    top: 24px;
+    right: 28px;
+    z-index: 999;
+    background: linear-gradient(180deg, #64748b 0%, #475569 45%, #334155 100%);
+    border: none;
+    color: #C7D2E5;
+    font-family: 'Rajdhani', var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    height: 36px;
+    padding: 0 18px;
+    border-radius: 0;
+    clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+    cursor: pointer;
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 8px rgba(51, 65, 85, 0.3));
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.cb-skip-btn:hover {
+    background: linear-gradient(180deg, #94a3b8 0%, #64748b 50%, #475569 100%);
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 12px rgba(71, 85, 105, 0.45));
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.cb-skip-btn:active {
+    transform: translateY(1px) scale(0.985);
+}
+
+/* ── PRIMARY RADIANT HERO BUTTON (Begin Story / Enter Core) ── */
+.cb-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 14px 34px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.85) 0%, rgba(139, 92, 246, 0.7) 50%, rgba(0, 229, 255, 0.55) 100%);
+    border: 1px solid rgba(0, 229, 255, 0.55);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.45), 0 0 20px rgba(0, 229, 255, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    text-decoration: none;
+}
+
+.cb-btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    border-color: #ffffff;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.95) 0%, rgba(0, 229, 255, 0.85) 100%);
+    box-shadow: 0 12px 40px rgba(0, 229, 255, 0.5), 0 0 35px var(--cyan-glow), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+}
+
+.cb-btn-primary:active {
+    transform: translateY(1px) scale(0.99);
+}
+
+/* ── SECONDARY STEALTH GLASS BUTTON (Skip Story) ── */
+.cb-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 14px 30px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(226, 232, 240, 0.85);
+    background: rgba(10, 8, 28, 0.65);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    text-decoration: none;
+}
+
+.cb-btn-secondary:hover {
+    transform: translateY(-2px);
+    background: rgba(26, 20, 56, 0.75);
+    border-color: var(--violet-light);
+    color: #ffffff;
+    box-shadow: 0 0 25px var(--violet-glow);
+}
+
+.cb-btn-secondary:active {
+    transform: translateY(1px);
+}

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>COREBOUND — Sentinel Access & Calibration Matrix</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="theme-tokens.css">
+    <style>
+        :root {
+            --space: #03020c;
+            --space-deep: #05021a;
+            --cyan: #00e5ff;
+            --cyan-glow: rgba(0, 229, 255, 0.45);
+            --violet: #8b5cf6;
+            --violet-glow: rgba(139, 92, 246, 0.40);
+            --gold: #f5b942;
+            --gold-glow: rgba(245, 185, 66, 0.35);
+            --glass-panel: rgba(10, 8, 28, 0.82);
+            --glass-border: rgba(139, 92, 246, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--space);
+            color: #edf2f7;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 229, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(5, 2, 26, 0.95) 0%, #03020c 100%);
+            background-attachment: fixed;
+        }
+
+        /* Top HUD */
+        .hud-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            background: rgba(6, 4, 18, 0.75);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .hud-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hud-logo-crest {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+        }
+
+        .hud-logo-crest img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .hud-title-wrap h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            color: #ffffff;
+        }
+
+        .hud-title-wrap span {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--cyan);
+        }
+
+        .hud-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hud-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 36px;
+            padding: 0 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 999px;
+            color: #cbd5e1;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .hud-btn:hover {
+            border-color: var(--cyan);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .hud-btn-primary {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.8), rgba(0, 229, 255, 0.7));
+            border-color: var(--cyan);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
+        }
+
+        /* Hero Main Viewport */
+        .main-viewport {
+            margin-top: 70px;
+            min-height: calc(100vh - 70px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Mode Selector Control Bar */
+        .view-switcher-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(6, 4, 18, 0.85);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 999px;
+            padding: 6px 8px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .view-switch-tab {
+            padding: 8px 20px;
+            border-radius: 999px;
+            border: none;
+            background: transparent;
+            color: rgba(203, 213, 225, 0.65);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .view-switch-tab.active {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(0, 229, 255, 0.8));
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+        }
+
+        /* Modal Container */
+        .showcase-container {
+            width: 100%;
+            max-width: 960px;
+            position: relative;
+        }
+
+        /* Embedded Modal View */
+        .cyber-modal-card {
+            background: var(--glass-panel);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 32px 36px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(139, 92, 246, 0.25);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Cyberpunk Chamfer polygon corners on dialog */
+        .chamfer-bracket {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-color: var(--cyan);
+            pointer-events: none;
+        }
+
+        .ch-tl { top: 0; left: 0; border-top: 3px solid var(--cyan); border-left: 3px solid var(--cyan); }
+        .ch-tr { top: 0; right: 0; border-top: 3px solid var(--cyan); border-right: 3px solid var(--cyan); }
+        .ch-bl { bottom: 0; left: 0; border-bottom: 3px solid var(--cyan); border-left: 3px solid var(--cyan); }
+        .ch-br { bottom: 0; right: 0; border-bottom: 3px solid var(--cyan); border-right: 3px solid var(--cyan); }
+
+        /* Auth Form Inner Styles */
+        .auth-view-content {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(6, 4, 18, 0.85);
+            padding: 5px;
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            margin-bottom: 20px;
+        }
+
+        .auth-tab-btn {
+            height: 42px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: rgba(203, 213, 225, 0.65);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .auth-tab-btn.active {
+            background: rgba(139, 92, 246, 0.35);
+            color: var(--cyan);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: #cbd5e1;
+        }
+
+        .form-input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(6, 4, 18, 0.85);
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            border-radius: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .form-input-wrap:focus-within {
+            border-color: var(--cyan);
+            box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+        }
+
+        .form-input {
+            width: 100%;
+            height: 44px;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 0 14px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+        }
+
+        .form-input::placeholder {
+            color: rgba(203, 213, 225, 0.3);
+        }
+
+        .btn-submit {
+            height: 48px;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.95), rgba(0, 229, 255, 0.85));
+            border: 1px solid var(--cyan);
+            border-radius: 10px;
+            color: #ffffff;
+            font-family: 'Rajdhani', 'Cinzel', sans-serif;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+            transition: all 0.25s ease;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 229, 255, 0.6);
+        }
+
+        /* Calibration Grid Styles */
+        .stepper-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: rgba(6, 4, 18, 0.7);
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 14px;
+        }
+
+        .step-item {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            color: rgba(203, 213, 225, 0.5);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .step-item.active {
+            background: rgba(0, 229, 255, 0.12);
+            color: var(--cyan);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+        }
+
+        .step-item.done {
+            color: #c4b5fd;
+        }
+
+        .progress-laser-track {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-laser-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #00e5ff);
+            border-radius: 999px;
+            box-shadow: 0 0 12px rgba(0, 229, 255, 0.6);
+            transition: width 0.4s ease;
+        }
+
+        .calib-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .calib-card-grid.cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .calib-option-card {
+            background: rgba(6, 4, 18, 0.78);
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 12px;
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .calib-option-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--cyan);
+            background: rgba(18, 12, 42, 0.85);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 229, 255, 0.25);
+        }
+
+        .calib-option-card.selected {
+            background: rgba(14, 18, 48, 0.9);
+            border-color: var(--cyan);
+            box-shadow: 0 0 24px rgba(0, 229, 255, 0.45);
+        }
+
+        .opt-title {
+            font-family: 'Cinzel', serif;
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .opt-desc {
+            font-size: 12px;
+            line-height: 1.4;
+            color: #cbd5e1;
+        }
+
+        .badge-pill {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 6px;
+            background: rgba(0, 229, 255, 0.15);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            color: var(--cyan);
+        }
+
+        .wizard-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-wizard-nav {
+            height: 42px;
+            padding: 0 24px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 6px;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-prev {
+            background: rgba(30, 24, 60, 0.8);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: #c4b5fd;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #7c3aed, #00e5ff);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+        }
+
+        .btn-next:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 28px rgba(0, 229, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top HUD Navigation -->
+    <header class="hud-header">
+        <div class="hud-brand">
+            <div class="hud-logo-crest">
+                <img src="assets/images/corebound_logo.png" alt="Corebound">
+            </div>
+            <div class="hud-title-wrap">
+                <h1>COREBOUND</h1>
+                <span>GUARDIAN CODEX NEXUS</span>
+            </div>
+        </div>
+
+        <div class="hud-actions">
+            <a href="story.html" class="hud-btn">📖 Story Cutscene</a>
+            <a href="level.html" class="hud-btn hud-btn-primary">⚡ Enter World Map</a>
+        </div>
+    </header>
+
+    <!-- Main Viewport -->
+    <main class="main-viewport">
+        <!-- View Switcher Tabs -->
+        <div class="view-switcher-bar">
+            <button class="view-switch-tab active" id="tabAuthToggle" onclick="switchView('auth')">
+                🔐 SENTINEL LOGIN & REGISTER
+            </button>
+            <button class="view-switch-tab" id="tabCalibToggle" onclick="switchView('calib')">
+                ⚙️ 7-PHASE CALIBRATION MATRIX
+            </button>
+        </div>
+
+        <div class="showcase-container">
+            <!-- Chamfered Outer Cyber Frame -->
+            <div class="cyber-modal-card">
+                <div class="chamfer-bracket ch-tl"></div>
+                <div class="chamfer-bracket ch-tr"></div>
+                <div class="chamfer-bracket ch-bl"></div>
+                <div class="chamfer-bracket ch-br"></div>
+
+                <!-- SECTION 1: AUTH MODAL -->
+                <div id="authSection" class="auth-view-content">
+                    <div class="auth-tabs">
+                        <button class="auth-tab-btn active" id="tabLogin" onclick="setAuthMode('login')">LOGIN (ACCESS LINK)</button>
+                        <button class="auth-tab-btn" id="tabRegister" onclick="setAuthMode('register')">REGISTER (INITIALIZE)</button>
+                    </div>
+
+                    <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                        <div class="form-group" id="userGroup" style="display: none;">
+                            <label class="form-label">SENTINEL CODEX ID</label>
+                            <div class="form-input-wrap">
+                                <input type="text" class="form-input" id="authUsername" placeholder="e.g. NexusHunter">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">QUANTUM COMMS EMAIL</label>
+                            <div class="form-input-wrap">
+                                <input type="email" class="form-input" id="authEmail" placeholder="guardian@corebound.io" required value="guardian.prime@corebound.io">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">SECRET ACCESS KEY</label>
+                            <div class="form-input-wrap">
+                                <input type="password" class="form-input" id="authPassword" placeholder="••••••••••••" required value="CyberSentinel#2026">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="authSubmitBtn">
+                            ESTABLISH ACCESS LINK
+                        </button>
+                    </form>
+                </div>
+
+                <!-- SECTION 2: 7-PHASE CALIBRATION MATRIX -->
+                <div id="calibSection" style="display: none;">
+                    <div class="stepper-bar" id="stepperBar"></div>
+
+                    <div class="progress-laser-track">
+                        <div class="progress-laser-fill" id="progressLaser" style="width: 14%;"></div>
+                    </div>
+
+                    <div id="phaseContent"></div>
+
+                    <div class="wizard-footer">
+                        <button class="btn-wizard-nav btn-prev" id="btnPrev" onclick="navPhase(-1)" style="visibility: hidden;">PREV PHASE</button>
+                        <button class="btn-wizard-nav btn-next" id="btnNext" onclick="navPhase(1)">NEXT PHASE ➔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Audio synthesis
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq = 440, type = 'sine', duration = 0.15) {
+            try {
+                if (ctx.state === 'suspended') ctx.resume();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // View switching
+        function switchView(view) {
+            playTone(600, 'triangle', 0.1);
+            document.getElementById('tabAuthToggle').classList.toggle('active', view === 'auth');
+            document.getElementById('tabCalibToggle').classList.toggle('active', view === 'calib');
+            document.getElementById('authSection').style.display = view === 'auth' ? 'block' : 'none';
+            document.getElementById('calibSection').style.display = view === 'calib' ? 'block' : 'none';
+        }
+
+        let authMode = 'login';
+        function setAuthMode(mode) {
+            authMode = mode;
+            playTone(520, 'sine', 0.12);
+            document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+            document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
+            document.getElementById('userGroup').style.display = mode === 'register' ? 'flex' : 'none';
+            document.getElementById('authSubmitBtn').innerText = mode === 'login' ? 'ESTABLISH ACCESS LINK' : 'INITIALIZE SENTINEL & CALIBRATE';
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            playTone(880, 'triangle', 0.3);
+            alert('Authentication successful! Routing to Guardian Calibration Matrix.');
+            switchView('calib');
+        }
+
+        // Calibration Data
+        const PHASES = [
+            {
+                num: 1,
+                title: "Primary Directive & Goal",
+                desc: "Define the core motivation for your Sentinel journey.",
+                options: [
+                    { id: "p1", title: "Placement Prep", desc: "Campus recruitments & core CS fundamentals.", badge: "CAMPUS" },
+                    { id: "p2", title: "Interview Prep", desc: "Live coding & system architecture defense.", badge: "CAREER" },
+                    { id: "p3", title: "Skill Improvement", desc: "Algorithmic speed & clean code mastery.", badge: "ENGINE" },
+                    { id: "p4", title: "Competitive Programming", desc: "Time-bound contests & DSA optimization.", badge: "COMBAT" },
+                    { id: "p5", title: "Academic Prep", desc: "University coursework & CS theory.", badge: "SCHOLAR" },
+                    { id: "p6", title: "Other / Custom", desc: "Self-directed open exploration.", badge: "CUSTOM" }
+                ]
+            },
+            {
+                num: 2,
+                title: "Target Role Specialization",
+                desc: "Select your engineering discipline.",
+                cols: 3,
+                options: [
+                    { id: "r1", title: "Frontend Developer", desc: "WebGL, React, UI Architecture." },
+                    { id: "r2", title: "Backend Developer", desc: "APIs, Microservices, Scale." },
+                    { id: "r3", title: "Full Stack Developer", desc: "End-to-end stack dominance." },
+                    { id: "r4", title: "Software Engineer", desc: "Generalist system architecture." },
+                    { id: "r5", title: "Data Analyst", desc: "SQL, Telemetry, Insights." },
+                    { id: "r6", title: "Data Scientist / ML", desc: "Neural networks & AI models." }
+                ]
+            },
+            {
+                num: 3,
+                title: "Current Skill Level Tier",
+                desc: "Calibrate your starting baseline for dynamic challenge scaling.",
+                cols: 3,
+                options: [
+                    { id: "t1", title: "Tier I — Beginner", desc: "Learning syntax & logic from scratch.", badge: "🌱 CYAN INITIATE" },
+                    { id: "t2", title: "Tier II — Intermediate", desc: "Building standard projects & medium DSA.", badge: "⚔️ PURPLE SENTINEL" },
+                    { id: "t3", title: "Tier III — Advanced", desc: "Optimization & complex dynamic scale.", badge: "👑 GOLD ARCHON" }
+                ]
+            },
+            {
+                num: 4,
+                title: "Focus Practice Topics",
+                desc: "Multi-select discipline domains to prioritize.",
+                cols: 3,
+                options: [
+                    { id: "top1", title: "Data Structures & Algorithms", desc: "Trees, DP, Graphs, Arrays" },
+                    { id: "top2", title: "JavaScript / TypeScript", desc: "Async, Closures, DOM" },
+                    { id: "top3", title: "Python", desc: "Data Science, PyTorch, Scripts" },
+                    { id: "top4", title: "SQL & Databases", desc: "Joins, Indexing, ACID" },
+                    { id: "top5", title: "Backend Architecture", desc: "REST, Caching, Concurrency" },
+                    { id: "top6", title: "Problem Solving", desc: "Refactoring, Edge cases" }
+                ]
+            },
+            {
+                num: 5,
+                title: "Daily Practice Commitment",
+                desc: "How much neural compute time will you dedicate each rotation?",
+                options: [
+                    { id: "c1", title: "15 Minutes", desc: "Micro-sprints — 1 focused drill.", badge: "⚡ SPRINT" },
+                    { id: "c2", title: "30 Minutes", desc: "Steady progress — 2 targeted drills.", badge: "🎯 STEADY" },
+                    { id: "c3", title: "1 Hour", desc: "Standard interview preparation.", badge: "⚔️ BATTLE" },
+                    { id: "c4", title: "2+ Hours", desc: "Deep-dive problem solving.", badge: "🔥 DEEP FOCUS" }
+                ]
+            },
+            {
+                num: 6,
+                title: "Challenge Engine & Difficulty",
+                desc: "Configure how the Singularity Core modulates problem complexity.",
+                options: [
+                    { id: "d1", title: "Adaptive Engine", desc: "Auto-tunes difficulty dynamically based on performance.", badge: "★ RECOMMENDED" },
+                    { id: "d2", title: "Easy Guided Pace", desc: "Contextual hints and step-by-step breakdowns." },
+                    { id: "d3", title: "Medium Standard", desc: "Standard tech company interview difficulty." },
+                    { id: "d4", title: "Hardcore Gauntlet", desc: "Strict execution bounds and edge cases." }
+                ]
+            },
+            {
+                num: 7,
+                title: "Cognitive Learning Style",
+                desc: "How do you prefer narrative and technical material presented?",
+                options: [
+                    { id: "l1", title: "Story-driven Lore", desc: "Cosmic narrative briefings & chronicles." },
+                    { id: "l2", title: "Practice-heavy Drills", desc: "Direct code execution & instant test runners." },
+                    { id: "l3", title: "Balanced Symphony", desc: "Harmonious blend of story and code." },
+                    { id: "l4", title: "Challenge-heavy PvP", desc: "Timed competitive drills & leaderboard runs." }
+                ]
+            }
+        ];
+
+        let currentPhase = 0;
+        let selections = {};
+
+        function renderStepper() {
+            const bar = document.getElementById('stepperBar');
+            bar.innerHTML = PHASES.map((p, idx) => `
+                <div class="step-item ${idx === currentPhase ? 'active' : ''} ${idx < currentPhase ? 'done' : ''}" onclick="goToPhase(${idx})">
+                    P0${p.num}
+                </div>
+            `).join('');
+            document.getElementById('progressLaser').style.width = `${((currentPhase + 1) / PHASES.length) * 100}%`;
+        }
+
+        function renderPhase() {
+            const p = PHASES[currentPhase];
+            renderStepper();
+
+            const container = document.getElementById('phaseContent');
+            container.innerHTML = `
+                <div style="margin-bottom: 12px;">
+                    <span class="badge-pill">PHASE 0${p.num} OF 07</span>
+                    <h2 style="font-family: 'Cinzel', serif; font-size: 20px; color: #fff;">${p.title}</h2>
+                    <p style="font-size: 13px; color: #cbd5e1;">${p.desc}</p>
+                </div>
+                <div class="calib-card-grid ${p.cols === 3 ? 'cols-3' : ''}">
+                    ${p.options.map(opt => `
+                        <div class="calib-option-card ${selections[p.num] === opt.id ? 'selected' : ''}" onclick="selectOption(${p.num}, '${opt.id}')">
+                            ${opt.badge ? `<span class="badge-pill">${opt.badge}</span>` : ''}
+                            <div class="opt-title">${opt.title}</div>
+                            <div class="opt-desc">${opt.desc}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('btnPrev').style.visibility = currentPhase > 0 ? 'visible' : 'hidden';
+            document.getElementById('btnNext').innerText = currentPhase === PHASES.length - 1 ? 'ENGAGE & ENTER MAP ➔' : 'NEXT PHASE ➔';
+        }
+
+        function selectOption(phaseNum, optId) {
+            playTone(550, 'triangle', 0.15);
+            selections[phaseNum] = optId;
+            renderPhase();
+        }
+
+        function navPhase(delta) {
+            playTone(650, 'sine', 0.1);
+            if (delta > 0 && !selections[PHASES[currentPhase].num]) {
+                // Auto-pick first if none selected
+                selections[PHASES[currentPhase].num] = PHASES[currentPhase].options[0].id;
+            }
+
+            if (currentPhase + delta >= PHASES.length) {
+                playTone(880, 'triangle', 0.4);
+                alert('CALIBRATION SYNCHRONIZED! Sentinel profile registered.');
+                window.location.href = 'level.html';
+                return;
+            }
+
+            currentPhase = Math.max(0, Math.min(PHASES.length - 1, currentPhase + delta));
+            renderPhase();
+        }
+
+        function goToPhase(idx) {
+            playTone(480, 'sine', 0.1);
+            currentPhase = idx;
+            renderPhase();
+        }
+
+        // Initialize
+        renderPhase();
+    </script>
+</body>
+
+</html>

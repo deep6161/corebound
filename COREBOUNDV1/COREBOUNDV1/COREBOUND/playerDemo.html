@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COREBOUND — 3D Player Character & Guardian Controller</title>
+    <meta name="description" content="Playable 3D Guardian character demo with third-person kinematics, PBR armor, glowing energy cores, and interactive ancient mechanics for COREBOUND.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Three.js ES Module Import Map -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <link rel="stylesheet" href="playerDemo.css">
+</head>
+<body>
+    <!-- 3D WebGL Canvas Container -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Top Left Guardian Status HUD -->
+    <header class="demo-header-hud" id="demoHeaderHUD">
+        <div class="corebound-crest">COREBOUND</div>
+        <div class="divider-pipe"></div>
+        <div class="guardian-badge-info">
+            <span class="guardian-title-lbl">CELESTIAL SENTINEL</span>
+            <span class="guardian-status-lbl">GUARDIAN CHOSEN</span>
+        </div>
+    </header>
+
+    <!-- Top Right Real-Time State Debug Card -->
+    <aside class="state-debug-card" id="stateDebugCard">
+        <div class="state-row">
+            <span class="state-lbl">ANIM STATE</span>
+            <span class="state-val state-badge" id="debugAnimState">IDLE</span>
+        </div>
+        <div class="state-row">
+            <span class="state-lbl">VELOCITY</span>
+            <span class="state-val" id="debugSpeed">0.0 m/s</span>
+        </div>
+        <div class="state-row">
+            <span class="state-lbl">GROUNDED</span>
+            <span class="state-val" id="debugGrounded">YES</span>
+        </div>
+    </aside>
+
+    <!-- Bottom Controls Dock Guide -->
+    <nav class="controls-dock-hud" id="controlsDockHUD">
+        <div class="control-item">
+            <span class="key-kbd">W</span><span class="key-kbd">A</span><span class="key-kbd">S</span><span class="key-kbd">D</span>
+            <span>MOVE</span>
+        </div>
+        <div class="control-item">
+            <span class="key-kbd">SHIFT</span>
+            <span>SPRINT</span>
+        </div>
+        <div class="control-item">
+            <span class="key-kbd">SPACE</span>
+            <span>JUMP</span>
+        </div>
+        <div class="control-item">
+            <span class="key-kbd">MOUSE</span>
+            <span>ORBIT CAM</span>
+        </div>
+        <div class="control-item">
+            <span class="key-kbd">E</span>
+            <span>INTERACT</span>
+        </div>
+    </nav>
+
+    <!-- Main ES6 Application Entry -->
+    <script type="module" src="playerDemo.js"></script>
+</body>
+</html>

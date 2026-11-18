@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="COREBOUND — Pattern Observatory 3D World (Light Theme). Master Aptitude skills across 15 interactive in-world missions to rebuild the Prediction Engine.">
+    <title>COREBOUND — Pattern Observatory 3D World</title>
+
+    <!-- Three.js ES Module Import Map -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;700;800&family=Rajdhani:wght@600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="theme-tokens.css">
+    <link rel="stylesheet" href="patternObservatory.css">
+</head>
+
+<body>
+    <!-- 3D WebGL Canvas Layer -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Cinematic Cutscene Letterbox Bars -->
+    <div class="cinematic-letterbox-top" id="cinematicTopBar"></div>
+    <div class="cinematic-letterbox-bottom" id="cinematicBottomBar"></div>
+
+    <!-- Cinematic Cutscene Intro HUD Banner -->
+    <div class="cinematic-intro-overlay" id="cinematicIntroOverlay">
+        <div class="cinematic-title-wrap">
+            <span class="cinematic-subtitle">CELESTIAL ARRIVAL // MOUNT LUMINA</span>
+            <h2 class="cinematic-headline">THE GUARDIAN ENTERS THE SANCTUARY</h2>
+        </div>
+        <button class="btn-skip-intro" id="btnSkipIntro" title="Skip Cutscene (ESC)">
+            <span>SKIP INTRO</span>
+            <span class="skip-key-pill">ESC</span>
+        </button>
+    </div>
+
+    <!-- Luminous Sky Vignette & Sun Flare -->
+    <div class="viewport-atmosphere" aria-hidden="true"></div>
+    <div class="sun-flare" aria-hidden="true"></div>
+
+    <!-- Ambient Audio Element -->
+    <audio id="bgAudio" loop preload="auto">
+        <source src="assets/audio/cosmic-awakening.mp3" type="audio/mpeg">
+        <source src="assets/audio/background_ambient.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Reconstruction Success Celebration Toast -->
+    <div class="reconstruction-toast" id="reconstructionToast">
+        <span class="toast-icon">✨</span>
+        <div>
+            <div class="toast-title" id="toastTitle">APTITUDE MISSION SOLVED!</div>
+            <div class="toast-desc" id="toastDesc">Pattern Lens stage 1 reconstructed successfully.</div>
+        </div>
+    </div>
+
+    <!-- Main HUD Overlay Layer -->
+    <main class="hud-layer">
+        <!-- TOP NAVIGATION & STATUS BAR -->
+        <header class="hud-header">
+            <div class="header-left hud-interactive">
+                <a href="ch1_missions.html" class="action-btn" id="btnBackToMissions" title="Return to Chapter 1 Missions">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>MISSIONS</span>
+                </a>
+
+                <div class="sector-badge">
+                    <span class="sector-sup">SECTOR 01 // SUMMIT 4,820M</span>
+                    <h1 class="sector-title">PATTERN OBSERVATORY</h1>
+                </div>
+            </div>
+
+            <!-- Global Restoration Progress Bar (0/15 Missions) -->
+            <div class="header-center hud-interactive">
+                <div class="restoration-progress-card">
+                    <div class="progress-info">
+                        <div class="progress-title-row">
+                            <span class="progress-label">OBSERVATORY RESTORATION</span>
+                            <span class="progress-val-text" id="globalRestorationPercent">0% (0/15)</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" id="globalProgressBarFill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right hud-interactive">
+                <!-- Camera View Mode Toggle (3rd Person Player / Free Orbit) -->
+                <button class="action-btn btn-cyan" id="btnCameraModeToggle" title="Switch between 3rd-Person Player Control and Free Orbit Inspection">
+                    <span id="camModeIcon">🎮</span>
+                    <span id="camModeText">PLAYER VIEW</span>
+                </button>
+
+                <!-- Auto Cinematic Tour Button -->
+                <button class="action-btn btn-gold" id="btnTourMode" title="Toggle 360° Cinematic Tour Mode">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polygon points="10 8 16 12 10 16 10 8"></polygon>
+                    </svg>
+                    <span>CINEMATIC TOUR</span>
+                </button>
+
+                <!-- Audio Toggle Button -->
+                <button class="icon-btn" id="btnAudioToggle" title="Toggle Ambient Audio">
+                    <svg id="iconSoundOn" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <svg id="iconSoundOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <line x1="23" y1="9" x2="17" y2="15"></line>
+                        <line x1="17" y1="9" x2="23" y2="15"></line>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- DESKTOP KEYBOARD CONTROLS HELPER BADGE (LEFT HUD) -->
+        <div class="controls-helper-badge hud-interactive" id="controlsHelperBadge">
+            <div class="helper-title">GAME CONTROLS</div>
+            <div class="helper-row">
+                <span class="key-pill">W</span><span class="key-pill">A</span><span class="key-pill">S</span><span class="key-pill">D</span>
+                <span class="helper-label">MOVE</span>
+            </div>
+            <div class="helper-row">
+                <span class="key-pill wide">SHIFT</span>
+                <span class="helper-label">SPRINT</span>
+            </div>
+            <div class="helper-row">
+                <span class="key-pill wide">SPACE</span>
+                <span class="helper-label">JUMP</span>
+            </div>
+            <div class="helper-row">
+                <span class="key-pill">E</span>
+                <span class="helper-label">INTERACT / SOLVE</span>
+            </div>
+            <div class="helper-row">
+                <span class="key-pill wide">MOUSE</span>
+                <span class="helper-label">ROTATE CAM</span>
+            </div>
+        </div>
+
+        <!-- IN-WORLD PROXIMITY INTERACTION PROMPT (DYNAMIC FLOAT ABOVE BOTTOM HUD) -->
+        <div class="proximity-prompt-hud hud-interactive" id="proximityPromptHud">
+            <div class="prompt-pulse-dot"></div>
+            <div class="prompt-content">
+                <div class="prompt-key-badge">
+                    <span class="prompt-key-cap">PRESS E</span>
+                    <span class="prompt-action-text" id="proximityPromptAction">TO CALIBRATE POINT</span>
+                </div>
+                <div class="prompt-target-title" id="proximityPromptTitle">Lens Base Calibration</div>
+                <div class="prompt-skill-sub" id="proximityPromptSkill">ARITHMETIC PROGRESSION (+5)</div>
+            </div>
+            <button class="prompt-interact-btn" id="btnProximityInteract">SOLVE ➔</button>
+        </div>
+
+        <!-- FLOATING 3D SYSTEM INSPECTION DRAWER (RIGHT) -->
+        <section class="system-inspect-card hud-interactive open" id="systemInspectCard" aria-label="System Inspection Panel">
+            <div class="inspect-header">
+                <div>
+                    <span class="inspect-tag" id="inspectTag">SYSTEM 01 // EAST WING</span>
+                    <h2 class="inspect-title" id="inspectTitle">Celestial Pattern Lens</h2>
+                </div>
+                <button class="close-inspect-btn" id="closeInspectBtn" title="Close Details">✕</button>
+            </div>
+
+            <!-- Stage Progress Indicator -->
+            <div class="system-stage-tracker">
+                <span class="stage-label" id="stageProgressLabel">RECONSTRUCTION: 0 / 3 STAGES</span>
+                <div class="stage-dots-wrap" id="stageDotsWrap">
+                    <div class="stage-dot" id="dotStage1"></div>
+                    <div class="stage-dot" id="dotStage2"></div>
+                    <div class="stage-dot" id="dotStage3"></div>
+                </div>
+            </div>
+
+            <!-- 3 In-World Sub-Mission Nodes for this System -->
+            <div class="sub-missions-list" id="subMissionsList">
+                <!-- Injected dynamically by patternObservatory.js -->
+            </div>
+        </section>
+
+        <!-- IN-WORLD APTITUDE PUZZLE MODAL -->
+        <div class="restoration-puzzle-modal hud-interactive" id="restorationPuzzleModal">
+            <div class="puzzle-header">
+                <div>
+                    <span class="puzzle-tag" id="modalPuzzleTag">STAGE 1 // NUMBER SERIES & PATTERNS</span>
+                    <h3 class="puzzle-title" id="modalPuzzleTitle">Lens Base Calibration</h3>
+                </div>
+                <button class="close-puzzle-btn" id="btnClosePuzzleModal">✕</button>
+            </div>
+
+            <!-- Live Guardian Comm inside Puzzle -->
+            <div class="guardian-puzzle-comms">
+                <img class="guardian-puzzle-avatar" id="modalGuardianAvatar" src="assets/images/characters/nova_avatar.png" alt="Guardian Avatar">
+                <div class="guardian-puzzle-text-wrap">
+                    <span class="guardian-puzzle-name" id="modalGuardianName">NOVA // Starward Sentinel</span>
+                    <p class="guardian-puzzle-speech" id="modalGuardianSpeech">
+                        "Lens के बेस को स्थिर करने के लिए नंबर पैटर्न को पहचानो और लुप्त संख्या का पता लगाओ!"
+                    </p>
+                </div>
+            </div>
+
+            <!-- Dynamic Aptitude Problem Body -->
+            <div class="puzzle-task-body" id="puzzleTaskBody">
+                <div class="aptitude-question-card">
+                    <span class="aptitude-skill-badge" id="puzzleSkillBadge">SKILL: ARITHMETIC PROGRESSIONS (AP)</span>
+                    <p class="aptitude-question-text" id="puzzleQuestionText">
+                        Identify the rule and find the missing number to align the optical base:
+                    </p>
+                    <div class="aptitude-series-display" id="puzzleSeriesDisplay">
+                        4, 9, 14, 19, [ ? ]
+                    </div>
+                </div>
+
+                <!-- Multiple-choice option buttons -->
+                <div class="aptitude-options-grid" id="puzzleOptionsGrid">
+                    <!-- Injected dynamically -->
+                </div>
+
+                <div class="puzzle-error-msg" id="puzzleErrorMsg">
+                    ❌ Incorrect alignment! Analyze the difference pattern and try again.
+                </div>
+            </div>
+
+            <!-- Reconstruction Trigger Button -->
+            <button class="btn-reconstruct-action" id="btnConfirmReconstruct">
+                <span>⚡ RECONSTRUCT STAGE</span>
+            </button>
+        </div>
+
+        <!-- MOBILE TOUCH CONTROLS LAYER (VIRTUAL JOYSTICK & ACTION BUTTONS) -->
+        <div class="mobile-controls-layer" id="mobileControlsLayer">
+            <!-- Left: Virtual Joystick Zone -->
+            <div class="joystick-zone" id="virtualJoystickZone">
+                <div class="joystick-base" id="joystickBase">
+                    <div class="joystick-knob" id="joystickKnob"></div>
+                </div>
+            </div>
+
+            <!-- Right: Action Buttons (Jump & Interact) -->
+            <div class="mobile-actions-zone">
+                <button class="mobile-action-btn btn-mobile-sprint" id="btnMobileSprint" title="Toggle Sprint">
+                    <span>⚡</span>
+                    <small>SPRINT</small>
+                </button>
+                <button class="mobile-action-btn btn-mobile-jump" id="btnMobileJump" title="Jump">
+                    <span>⬆</span>
+                    <small>JUMP</small>
+                </button>
+                <button class="mobile-action-btn btn-mobile-interact" id="btnMobileInteract" title="Interact / Solve">
+                    <span>E</span>
+                    <small>SOLVE</small>
+                </button>
+            </div>
+        </div>
+
+        <!-- BOTTOM CONTROLS & TELEPORT DOCK -->
+        <footer class="hud-bottom">
+            <!-- Left: Radar Minimap -->
+            <div class="radar-widget hud-interactive">
+                <div class="radar-canvas-wrap">
+                    <canvas id="radarCanvas"></canvas>
+                    <div class="radar-sweep"></div>
+                </div>
+                <div class="radar-info">
+                    <span class="radar-title">SECTOR RADAR</span>
+                    <span class="radar-coord">MOUNT LUMINA SUMMIT</span>
+                    <span style="font-size: 10px; color: #0284c7; font-weight: 700;" id="radarSystemsStatus">0 / 15 MISSIONS</span>
+                </div>
+            </div>
+
+            <!-- Center: 3D System Teleport Dock -->
+            <nav class="systems-dock hud-interactive" aria-label="Observatory Systems Navigation">
+                <button class="dock-node-btn" data-system="orbit" title="Orbit Full View">
+                    <span class="node-icon">🌐</span>
+                    <span>FULL VIEW</span>
+                </button>
+                <button class="dock-node-btn active" data-system="lens" title="Pattern Lens">
+                    <span class="node-status-dot"></span>
+                    <span class="node-icon">🔭</span>
+                    <span>PATTERN LENS</span>
+                </button>
+                <button class="dock-node-btn" data-system="flux" title="Flux Chamber">
+                    <span class="node-status-dot"></span>
+                    <span class="node-icon">⚡</span>
+                    <span>FLUX CHAMBER</span>
+                </button>
+                <button class="dock-node-btn" data-system="prism" title="Prism Matrix">
+                    <span class="node-status-dot"></span>
+                    <span class="node-icon">💎</span>
+                    <span>PRISM MATRIX</span>
+                </button>
+                <button class="dock-node-btn" data-system="cubes" title="Memory Cubes">
+                    <span class="node-status-dot"></span>
+                    <span class="node-icon">📦</span>
+                    <span>MEMORY CUBES</span>
+                </button>
+                <button class="dock-node-btn" data-system="core" title="Central Engine">
+                    <span class="node-status-dot"></span>
+                    <span class="node-icon">🌌</span>
+                    <span>CORE ENGINE</span>
+                </button>
+            </nav>
+
+            <!-- Right: Atmosphere Mood Switcher -->
+            <div class="view-modes-widget hud-interactive">
+                <button class="mode-btn active" data-mode="noon" title="High Noon Radiant Daylight">
+                    ☀️ <span>NOON</span>
+                </button>
+                <button class="mode-btn" data-mode="dawn" title="Ethereal Golden Dawn">
+                    🌅 <span>DAWN</span>
+                </button>
+                <button class="mode-btn" data-mode="aurora" title="Prismatic Aurora Atmosphere">
+                    ✨ <span>AURORA</span>
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- 3D World Entry Module Script -->
+    <script type="module" src="./patternObservatory.js"></script>
+</body>
+
+</html>
